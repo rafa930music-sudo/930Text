@@ -1,4 +1,4 @@
-# TextoTodo Pro (`textotodooficial-hub`) — 10 Suites de Texto, Diccionario Español y Productividad
+# 930Text (`textotodooficial-hub`) — 10 Suites de Texto, Diccionario Español y Productividad
 
 Tu repositorio **`textotodooficial-hub`** (**TextoTodo Pro**) está 100% configurado, auditado y listo para publicarse en **GitHub Pages**, indexar las **10 suites** en Google y recibir donaciones voluntarias por PayPal y valoraciones directamente en **`textotodo.oficial@gmail.com`**.
 
