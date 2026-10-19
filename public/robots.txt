@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://textotodooficial-hub.github.io/TextoTodo/sitemap.xml
+Sitemap: https://rafa930music-sudo.github.io/930Text/sitemap.xml
