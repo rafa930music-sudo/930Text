@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#05070E"/>
+      <stop offset="100%" stop-color="#12162a"/>
+    </linearGradient>
+    <linearGradient id="prismFace" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38E8FF" stop-opacity="0.35"/>
+      <stop offset="50%" stop-color="#9D8CFF" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#1E2338" stop-opacity="0.85"/>
+    </linearGradient>
+    <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38E8FF"/>
+      <stop offset="50%" stop-color="#9D8CFF"/>
+      <stop offset="100%" stop-color="#F0C96B"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <rect x="48" y="48" width="416" height="416" rx="92" fill="#0C101D" stroke="url(#borderGrad)" stroke-width="6"/>
+  
+  <!-- Optical Input Beam -->
+  <path d="M70 256H160" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round" stroke-opacity="0.9"/>
+  
+  <!-- 3D Prism Polygon -->
+  <polygon points="256,120 160,350 352,350" fill="url(#prismFace)" stroke="url(#borderGrad)" stroke-width="6" stroke-linejoin="round"/>
+  <line x1="256" y1="120" x2="256" y2="350" stroke="#38E8FF" stroke-width="3" stroke-opacity="0.6"/>
+  
+  <!-- Refracted Output Beams -->
+  <path d="M256,235 L430,170" stroke="#38E8FF" stroke-width="8" stroke-linecap="round"/>
+  <path d="M256,256 L440,256" stroke="#9D8CFF" stroke-width="8" stroke-linecap="round"/>
+  <path d="M256,275 L430,342" stroke="#F0C96B" stroke-width="8" stroke-linecap="round"/>
+</svg>

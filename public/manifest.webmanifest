@@ -1,0 +1,33 @@
+{
+  "id": "./",
+  "name": "930Text — 10 Suites de Texto y Diccionario",
+  "short_name": "930Text",
+  "description": "Plataforma gratuita 10 en 1: 44 fuentes Unicode, traductor con voz, resumidor, corrector, limpiador, SEO, convertidor, diccionario de +15.000 palabras y rimas, Autopilot y citas APA 7.",
+  "lang": "es",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#060810",
+  "theme_color": "#8C7CFF",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

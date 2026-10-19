@@ -1,0 +1,6 @@
+{
+  "name": "930Text — Fuentes, rimas y herramientas de texto online",
+  "description": "Plataforma gratuita 10 en 1: 44 fuentes Unicode, diccionario de +15.000 palabras y rimas, resumidor, corrector, traductor, limpiador, citas APA 7 y diff.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

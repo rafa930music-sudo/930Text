@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="prismGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38E8FF" stop-opacity="0.6"/>
+      <stop offset="50%" stop-color="#9D8CFF" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#1E2338" stop-opacity="0.95"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+  <rect width="200" height="200" rx="44" fill="#05070E"/>
+  <path d="M30 100H70" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" filter="url(#glow)"/>
+  <polygon points="120,30 70,160 170,160" fill="url(#prismGrad)" stroke="#38E8FF" stroke-width="4" stroke-linejoin="round"/>
+  <line x1="120" y1="30" x2="120" y2="160" stroke="#38E8FF" stroke-width="3" stroke-opacity="0.8"/>
+  <path d="M120,95 L175,70" stroke="#38E8FF" stroke-width="6" stroke-linecap="round" filter="url(#glow)"/>
+  <path d="M120,105 L180,105" stroke="#9D8CFF" stroke-width="6" stroke-linecap="round" filter="url(#glow)"/>
+  <path d="M120,115 L175,140" stroke="#F0C96B" stroke-width="6" stroke-linecap="round" filter="url(#glow)"/>
+</svg>

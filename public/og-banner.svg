@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#05070E" />
+      <stop offset="50%" stop-color="#0C1020" />
+      <stop offset="100%" stop-color="#071624" />
+    </linearGradient>
+    <linearGradient id="brandGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38E8FF" />
+      <stop offset="50%" stop-color="#9D8CFF" />
+      <stop offset="100%" stop-color="#F0C96B" />
+    </linearGradient>
+    <linearGradient id="prismFace" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38E8FF" stop-opacity="0.4" />
+      <stop offset="50%" stop-color="#9D8CFF" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="#1E2338" stop-opacity="0.9" />
+    </linearGradient>
+    <radialGradient id="glow1" cx="25%" cy="30%" r="60%">
+      <stop offset="0%" stop-color="#38E8FF" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#38E8FF" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="glow2" cx="80%" cy="75%" r="55%">
+      <stop offset="0%" stop-color="#9D8CFF" stop-opacity="0.22" />
+      <stop offset="100%" stop-color="#9D8CFF" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)" />
+  <rect width="1200" height="630" fill="url(#glow1)" />
+  <rect width="1200" height="630" fill="url(#glow2)" />
+
+  <!-- Architectural Grid -->
+  <g stroke="#ffffff" stroke-opacity="0.04" stroke-width="1">
+    <line x1="0" y1="126" x2="1200" y2="126" />
+    <line x1="0" y1="252" x2="1200" y2="252" />
+    <line x1="0" y1="378" x2="1200" y2="378" />
+    <line x1="0" y1="504" x2="1200" y2="504" />
+    <line x1="200" y1="0" x2="200" y2="630" />
+    <line x1="500" y1="0" x2="500" y2="630" />
+    <line x1="850" y1="0" x2="850" y2="630" />
+  </g>
+
+  <!-- Main Card Frame -->
+  <rect x="64" y="54" width="1072" height="522" rx="34" fill="#0C101D" fill-opacity="0.92" stroke="#38E8FF" stroke-opacity="0.25" stroke-width="2" />
+
+  <!-- Prism Vector Graphic on Left -->
+  <g transform="translate(130, 160)">
+    <!-- Input beam -->
+    <path d="M-40 96H45" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" stroke-opacity="0.9"/>
+    <!-- Prism polygon -->
+    <polygon points="120,10 45,180 195,180" fill="url(#prismFace)" stroke="url(#brandGrad)" stroke-width="5" stroke-linejoin="round"/>
+    <line x1="120" y1="10" x2="120" y2="180" stroke="#38E8FF" stroke-width="3" stroke-opacity="0.7"/>
+    <!-- Output beams -->
+    <path d="M120,95 L245,50" stroke="#38E8FF" stroke-width="7" stroke-linecap="round"/>
+    <path d="M120,105 L255,105" stroke="#9D8CFF" stroke-width="7" stroke-linecap="round"/>
+    <path d="M120,115 L245,160" stroke="#F0C96B" stroke-width="7" stroke-linecap="round"/>
+  </g>
+
+  <!-- Brand Title & Tagline -->
+  <text x="430" y="240" font-family="system-ui, -apple-system, sans-serif" font-size="78" font-weight="900" fill="#FFFFFF" letter-spacing="-1">
+    930<tspan fill="url(#brandGrad)">Text</tspan>
+  </text>
+  <text x="432" y="284" font-family="system-ui, -apple-system, sans-serif" font-size="20" font-weight="700" fill="#38E8FF" letter-spacing="4">
+    UN TEXTO, MÚLTIPLES POSIBILIDADES
+  </text>
+
+  <!-- Subheadline -->
+  <text x="430" y="356" fill="#9AA6C0" font-family="system-ui, -apple-system, sans-serif" font-size="22" font-weight="500">
+    Traduce. Resume. Corrige. Encuentra. Crea. Inspírate.
+  </text>
+
+  <!-- Feature Badges -->
+  <g transform="translate(430, 408)">
+    <rect x="0" y="0" width="180" height="48" rx="14" fill="#13192C" stroke="#38E8FF" stroke-opacity="0.4" stroke-width="1.5" />
+    <text x="20" y="30" fill="#FFFFFF" font-family="system-ui, -apple-system, sans-serif" font-size="16" font-weight="800">10 Suites</text>
+
+    <rect x="195" y="0" width="195" height="48" rx="14" fill="#13192C" stroke="#9D8CFF" stroke-opacity="0.4" stroke-width="1.5" />
+    <text x="215" y="30" fill="#FFFFFF" font-family="system-ui, -apple-system, sans-serif" font-size="16" font-weight="800">105+ Idiomas</text>
+
+    <rect x="405" y="0" width="195" height="48" rx="14" fill="#13192C" stroke="#F0C96B" stroke-opacity="0.4" stroke-width="1.5" />
+    <text x="425" y="30" fill="#F0C96B" font-family="system-ui, -apple-system, sans-serif" font-size="16" font-weight="800">100% Gratis</text>
+  </g>
+
+  <!-- Footer Strip -->
+  <text x="430" y="508" fill="#34D399" font-family="system-ui, -apple-system, sans-serif" font-size="17" font-weight="800">
+    ✓ Sin Registro · Fuentes Unicode · Rimas · Citas APA · Autopilot 5 en 1
+  </text>
+</svg>
