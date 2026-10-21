@@ -1,6 +1,10 @@
-# 930Text (`930Text`) — 10 Suites de Texto, Diccionario Español y Productividad
+# 930Text — [Ir a 930Text Suite Online](https://rafa930music-sudo.github.io/930Text/)
 
-Tu repositorio **`930Text`** está 100% configurado, auditado y listo para publicarse en **GitHub Pages** (`https://rafa930music-sudo.github.io/930Text/`), indexar las **10 suites** en Google y recibir donaciones voluntarias por PayPal y valoraciones directamente en **`rafa.930music@gmail.com`**.
+Tu repositorio **`930Text`** es el código fuente. La aplicación web oficial y productiva está aquí: [https://rafa930music-sudo.github.io/930Text/](https://rafa930music-sudo.github.io/930Text/).
+
+---
+
+Está 100% configurado, auditado y listo para publicarse en **GitHub Pages** (`https://rafa930music-sudo.github.io/930Text/`), indexar las **10 suites** en Google y recibir donaciones voluntarias por PayPal y valoraciones directamente en **`rafa.930music@gmail.com`**.
 
 ---
 
