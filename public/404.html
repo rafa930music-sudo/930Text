@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="es" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" id="dynamic-theme-color" content="#05070E" />
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+      html {
+        background-color: #05070e;
+      }
+      html[data-theme="light"] {
+        background-color: #f6f8fc;
+      }
+    </style>
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('930text-theme');
+          if (t === 'light') {
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.documentElement.style.backgroundColor = '#f6f8fc';
+            var metaColor = document.getElementById('dynamic-theme-color');
+            if (metaColor) metaColor.setAttribute('content', '#f6f8fc');
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
+    <meta name="googlebot" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
+    <meta name="google-site-verification" content="googlebb61da9a37e8d9e1" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta name="author" content="Rafael Moreno Roman" />
+    <meta name="creator" content="Rafael Moreno Roman" />
+    <meta name="publisher" content="930Text" />
+    <meta name="application-name" content="930Text" />
+    <meta name="category" content="productivity, utilities, education, writing tools, dictionary, seo" />
+    <meta
+      name="keywords"
+      content="930text, 930 texto, cambiar fuentes de letras, conversor de letras para instagram, resumidor de textos online gratis, corrector ortografico y redaccion, contador de palabras y caracteres, limpiar formato de texto, diccionario de rimas consonantes y asonantes, diccionario espanol definiciones y sinonimos, contador de silabas poeticas, generador de citas apa 7 online, comparador de textos diff, traductor online con voz"
+    />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="930Text" />
+
+    <link rel="canonical" href="https://rafa930music-sudo.github.io/930Text/" />
+    <link rel="alternate" hreflang="es" href="https://rafa930music-sudo.github.io/930Text/" />
+    <link rel="alternate" hreflang="es-ES" href="https://rafa930music-sudo.github.io/930Text/" />
+    <link rel="alternate" hreflang="es-MX" href="https://rafa930music-sudo.github.io/930Text/" />
+    <link rel="alternate" hreflang="es-AR" href="https://rafa930music-sudo.github.io/930Text/" />
+    <link rel="alternate" hreflang="es-CO" href="https://rafa930music-sudo.github.io/930Text/" />
+    <link rel="alternate" hreflang="x-default" href="https://rafa930music-sudo.github.io/930Text/" />
+
+    <title>930Text — 10 Suites: Fuentes, Rimas, Diccionario y Citas APA</title>
+    <meta
+      name="description"
+      content="930Text: Plataforma gratuita 10 en 1 con 44 fuentes Unicode, diccionario de +15.000 palabras y rimas, resumidor, corrector, traductor, citas APA 7 y diff."
+    />
+
+    <!-- OpenGraph / Facebook / WhatsApp / LinkedIn / Discord -->
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_ES" />
+    <meta property="og:locale:alternate" content="es_MX" />
+    <meta property="og:locale:alternate" content="es_AR" />
+    <meta property="og:site_name" content="930Text" />
+    <meta property="og:title" content="930Text — 10 Suites: Fuentes, Rimas, Diccionario y Citas APA" />
+    <meta
+      property="og:description"
+      content="930Text: Plataforma gratuita 10 en 1 con 44 fuentes Unicode, diccionario de +15.000 palabras y rimas, resumidor, corrector, traductor, citas APA 7 y diff."
+    />
+    <meta property="og:url" content="https://rafa930music-sudo.github.io/930Text/" />
+    <meta property="og:image" content="https://rafa930music-sudo.github.io/930Text/og-banner.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="930Text — Suite de 10 herramientas gratuitas: Fuentes Unicode, Diccionario Español y Rimas, Resumidor, Corrector, Citas APA 7 y Autopilot"
+    />
+
+    <!-- Twitter / X Cards -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="930Text — 10 Suites: Fuentes, Rimas, Diccionario y Citas APA" />
+    <meta
+      name="twitter:description"
+      content="930Text: Plataforma gratuita 10 en 1 con 44 fuentes Unicode, diccionario de +15.000 palabras y rimas, resumidor, corrector, traductor, citas APA 7 y diff."
+    />
+    <meta name="twitter:image" content="https://rafa930music-sudo.github.io/930Text/og-banner.png" />
+    <meta
+      name="twitter:image:alt"
+      content="930Text — 10 herramientas profesionales de texto, estudio, diccionario, citas APA y composición"
+    />
+
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./favicon.ico" sizes="48x48" />
+    <link rel="icon" type="image/png" sizes="48x48" href="./favicon-48x48.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png" />
+    <link rel="icon" type="image/svg+xml" href="./icon.svg" />
+    <link rel="shortcut icon" href="./favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem('930text-theme');
+          var mode =
+            saved === 'dark' || saved === 'light'
+              ? saved
+              : window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches
+                ? 'light'
+                : 'dark';
+          document.documentElement.dataset.theme = mode;
+        } catch (e) {
+          document.documentElement.dataset.theme = 'dark';
+        }
+      })();
+    </script>
+
+    <!-- Schema.org Structured Data Graph (WebSite, WebApplication, ItemList of 10 Tools, FAQPage) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://rafa930music-sudo.github.io/930Text/#website",
+            "name": "930Text",
+            "alternateName": ["930Texto", "930 Text", "930 Texto", "930Text Oficial"],
+            "url": "https://rafa930music-sudo.github.io/930Text/",
+            "inLanguage": "es",
+            "description": "930Text: Plataforma gratuita 10 en 1 con 44 fuentes Unicode, diccionario de +15.000 palabras y rimas, resumidor, corrector, traductor, citas APA 7 y diff.",
+            "publisher": {
+              "@type": "Person",
+              "name": "Rafael Moreno Roman",
+              "email": "mailto:rafa.930music@gmail.com"
+            },
+            "potentialAction": {
+              "@type": "SearchAction",
+              "target": "https://rafa930music-sudo.github.io/930Text/#centro?q={search_term_string}",
+              "query-input": "required name=search_term_string"
+            }
+          },
+          {
+            "@type": ["WebApplication", "SoftwareApplication"],
+            "@id": "https://rafa930music-sudo.github.io/930Text/#application",
+            "name": "930Text — 10 Suites: Fuentes, Rimas, Diccionario y Citas APA",
+            "url": "https://rafa930music-sudo.github.io/930Text/",
+            "description": "930Text: Suite gratuita 10 en 1 para cambiar fuentes Unicode (44 estilos y 14 marcos), traducir textos con voz, resumir apuntes y documentos en 6 formatos, corregir ortografía y redacción, limpiar formato sucio, analizar densidad SEO y SERP Google, convertir 20 formatos, buscar rimas y definiciones en +15.000 palabras del español, ejecutar Autopilot 5 en 1 y generar citas APA 7 o comparar versiones Diff.",
+            "applicationCategory": "UtilitiesApplication",
+            "applicationSubCategory": "Writing, Study, Dictionary & Text Processing Suite",
+            "operatingSystem": "All",
+            "browserRequirements": "Requires JavaScript. Works on Chrome, Safari, Firefox, Edge, Android and iOS.",
+            "inLanguage": "es",
+            "softwareVersion": "2026.15",
+            "isAccessibleForFree": true,
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "EUR",
+              "availability": "https://schema.org/InStock"
+            },
+            "featureList": [
+              "01 · Conversor de 44 fuentes Unicode y 14 marcos decorativos para Instagram, TikTok, WhatsApp, X y LinkedIn",
+              "02 · Traductor multilingüe en 6 idiomas con control de velocidad de voz",
+              "03 · Resumidor híbrido automático en 6 modos: ficha ejecutiva, viñetas, párrafo, preguntas de examen, plan de acción e hilo de redes",
+              "04 · Corrector ortográfico profundo y mejorador de estilo en español",
+              "05 · Limpiador de texto avanzado para quitar HTML, Markdown, URLs, emails, saltos de PDF, líneas duplicadas y espacios dobles",
+              "06 · Analizador de texto con contador de palabras, índice Fernández Huerta, simulador SERP de Google y límites de redes",
+              "07 · Convertidor 20 en 1: mayúsculas, minúsculas, Tipo Título, camelCase, snake_case, url-slug, Tablas Markdown, extractor de enlaces y Base64",
+              "08 · Diccionario de Rimas y Léxico Español (+15.000 palabras con definiciones y sinónimos), contador de sílabas poéticas con sinalefa y caja de ritmos BPM",
+              "09 · Autopilot 1-Clic (5 en 1): limpia, corrige ortografía, extrae resumen ejecutivo, crea test de autoevaluación y genera titular SEO simultáneamente",
+              "10 · Laboratorio Documental: Comparador de versiones A/B (Diff palabra por palabra), Generador de Citas Bibliográficas (APA 7, MLA 9, ISO 690, Harvard, BibTeX) y Plantillas B2B"
+            ],
+            "author": {
+              "@type": "Person",
+              "name": "Rafael Moreno Roman",
+              "email": "mailto:rafa.930music@gmail.com",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Calle Marte, 10",
+                "postalCode": "08930",
+                "addressLocality": "Sant Adrià de Besòs",
+                "addressRegion": "Barcelona",
+                "addressCountry": "ES"
+              }
+            }
+          },
+          {
+            "@type": "ItemList",
+            "@id": "https://rafa930music-sudo.github.io/930Text/#tools-list",
+            "name": "10 Suites de Texto Online Gratis en 930Text",
+            "itemListOrder": "https://schema.org/ItemListOrderAscending",
+            "numberOfItems": 10,
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Conversor de Fuentes Unicode y Letras para Redes Sociales",
+                "description": "44 estilos de letras elegantes, negritas, cursivas y góticas con 14 marcos para copiar y pegar en Instagram, TikTok, WhatsApp y LinkedIn.",
+                "url": "https://rafa930music-sudo.github.io/930Text/#fuente"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Traductor Online Multilingüe con Pronunciación",
+                "description": "Traduce textos entre español, inglés, francés, alemán, portugués e italiano con lectura en voz alta y descarga bilingüe.",
+                "url": "https://rafa930music-sudo.github.io/930Text/#traductor"
+              },
+              {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "Resumidor de Textos y Apuntes Online",
+                "description": "Extrae ideas clave en 6 formatos: ficha ejecutiva, puntos clave, párrafo, preguntas tipo test, plan de acción o hilo.",
+                "url": "https://rafa930music-sudo.github.io/930Text/#resumidor"
+              },
+              {
+                "@type": "ListItem",
+                "position": 4,
+                "name": "Corrector Ortográfico y Mejorador de Redacción en Español",
+                "description": "Corrige faltas ortográficas (b/v, c/s/z, k/qu, tildes), puntuación, muletillas y redundancias para correos y trabajos.",
+                "url": "https://rafa930music-sudo.github.io/930Text/#mejorador"
+              },
+              {
+                "@type": "ListItem",
+                "position": 5,
+                "name": "Limpiador de Texto, Espacios, HTML y Líneas Duplicadas",
+                "description": "Limpia textos copiados de PDF, Word o webs eliminando saltos rotos, etiquetas HTML, URLs y duplicados.",
+                "url": "https://rafa930music-sudo.github.io/930Text/#limpiador"
+              },
+              {
+                "@type": "ListItem",
+                "position": 6,
+                "name": "Contador de Palabras, Caracteres y Analizador SEO con SERP",
+                "description": "Calcula palabras, caracteres sin espacios, tiempo de lectura, legibilidad Fernández Huerta, simulador SERP de Google, bigramas y trigramas SEO.",
+                "url": "https://rafa930music-sudo.github.io/930Text/#analizador"
+              },
+              {
+                "@type": "ListItem",
+                "position": 7,
+                "name": "Convertidor de Mayúsculas, Minúsculas, Tablas Markdown y Slugs",
+                "description": "20 conversiones instantáneas: MAYÚSCULAS, minúsculas, Tipo Título, camelCase, snake_case, url-slug, tablas Markdown y extractor de enlaces.",
+                "url": "https://rafa930music-sudo.github.io/930Text/#convertidor"
+              },
+              {
+                "@type": "ListItem",
+                "position": 8,
+                "name": "Diccionario Español (+15.000 palabras), Rimas y Contador de Sílabas Poéticas",
+                "description": "Encuentra rimas consonantes, asonantes y multisilábicas, consulta definiciones y sinónimos, mide sílabas con sinalefa y practica con caja de ritmos BPM.",
+                "url": "https://rafa930music-sudo.github.io/930Text/#rimar"
+              },
+              {
+                "@type": "ListItem",
+                "position": 9,
+                "name": "Autopilot 1-Clic (Flujo Inteligente 5 en 1)",
+                "description": "Limpia formato, corrige ortografía, genera resumen ejecutivo, crea preguntas de examen y extrae titular SEO con slug en un solo clic.",
+                "url": "https://rafa930music-sudo.github.io/930Text/#autopilot"
+              },
+              {
+                "@type": "ListItem",
+                "position": 10,
+                "name": "Comparador de Versiones Diff A/B, Citas APA 7 y Plantillas Ejecutivas",
+                "description": "Compara dos textos palabra por palabra, genera bibliografía en APA 7, MLA 9, ISO 690, Harvard y BibTeX, y crea correos profesionales.",
+                "url": "https://rafa930music-sudo.github.io/930Text/#laboratorio"
+              }
+            ]
+          },
+          {
+            "@type": "FAQPage",
+            "@id": "https://rafa930music-sudo.github.io/930Text/#faq",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "¿930Text es completamente gratis y sin registro?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Sí. Las 10 suites de 930Text son 100% gratuitas, sin muros de pago ni límites ocultos y sin necesidad de crear cuenta. Si te resulta útil, puedes apoyar voluntariamente por PayPal."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "¿Cómo cambiar el tipo de letra para Instagram, TikTok o WhatsApp?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Escribe tu frase en la herramienta Fuentes Unicode, elige entre los 44 estilos y 14 marcos decorativos, y pulsa Copiar. Como utiliza caracteres del estándar Unicode, el estilo se mantiene al pegarlo en biografías de Instagram, TikTok, WhatsApp, X o LinkedIn."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "¿Cómo resumir un texto largo o usar Autopilot 5 en 1?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Puedes pegar tus apuntes o informe en el Resumidor para elegir entre 6 formatos, o usar Autopilot 1-Clic (#autopilot) para limpiar, corregir ortografía, extraer el resumen ejecutivo, crear preguntas de examen y generar el titular SEO simultáneamente."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "¿Cómo funciona el Diccionario Español de +15.000 palabras y el contador de sílabas poéticas?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "El estudio Rimar indexa más de 15.000 voces reales del español con definiciones, sinónimos y familia léxica, aplicando silabeo fonético con sinalefas y la ley del acento final (+1 en agudas, -1 en esdrújulas) junto con caja de ritmos BPM."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "¿Cómo generar citas bibliográficas APA 7 o comparar dos versiones de un documento?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "En el Laboratorio Documental (#laboratorio) puedes comparar dos textos palabra por palabra con porcentaje de similitud o generar referencias bibliográficas automáticas en formato APA 7, MLA 9, ISO 690, Harvard y BibTeX."
+                }
+              }
+            ]
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <noscript>
+      <div style="max-width:960px;margin:2rem auto;padding:1.5rem;font-family:system-ui,sans-serif;line-height:1.6">
+        <h1>930Text — 10 Suites de fuentes, rimas, diccionario español, resúmenes y citas APA</h1>
+        <p>
+          Plataforma online 100% gratuita en español con 10 suites profesionales para estudiantes, oficina, creadores de contenido, redactores SEO y compositores:
+        </p>
+        <ul>
+          <li><strong>01 · Conversor de Fuentes Unicode (44 estilos y 14 marcos):</strong> Letras negritas, cursivas, góticas y estéticas para copiar y pegar en Instagram, TikTok, WhatsApp y LinkedIn.</li>
+          <li><strong>02 · Traductor Multilingüe con Voz:</strong> Traducción instantánea entre español, inglés, francés, alemán, portugués e italiano.</li>
+          <li><strong>03 · Resumidor de Textos y Apuntes (6 modos):</strong> Resúmenes automáticos en ficha ejecutiva, viñetas, párrafo, preguntas de examen, plan de acción o hilo.</li>
+          <li><strong>04 · Corrector Ortográfico y Mejorador de Redacción:</strong> Corrección profunda de faltas (b/v, c/s/z, k/qu, tildes), muletillas, redundancias y puntuación.</li>
+          <li><strong>05 · Limpiador de Texto y Formato:</strong> Elimina espacios dobles, saltos de PDF, etiquetas HTML, Markdown, URLs y líneas duplicadas.</li>
+          <li><strong>06 · Contador de Palabras y Analizador SEO:</strong> Índice de legibilidad Fernández Huerta, simulador SERP de Google, tiempo de lectura, bigramas y trigramas.</li>
+          <li><strong>07 · Convertidor 20 en 1:</strong> MAYÚSCULAS, minúsculas, Tipo Título, camelCase, snake_case, url-slug, Tablas Markdown y extractor de enlaces.</li>
+          <li><strong>08 · Diccionario Español (+15.000 palabras), Rimas y Métrica Poética:</strong> Rimas consonantes, asonantes y multisilábicas, definiciones, sinónimos, sílabas con sinalefa y caja de ritmos BPM.</li>
+          <li><strong>09 · Autopilot 1-Clic (5 en 1):</strong> Limpia, corrige, resume, crea test de autoevaluación y genera titular SEO en un solo paso.</li>
+          <li><strong>10 · Comparador Diff A/B, Citas APA 7 y Plantillas B2B:</strong> Auditoría de cambios entre versiones, generador bibliográfico APA 7 / MLA / ISO / Harvard y plantillas ejecutivas.</li>
+        </ul>
+      </div>
+    </noscript>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

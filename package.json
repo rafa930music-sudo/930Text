@@ -1,5 +1,5 @@
 {
-  "name": "textotodooficial-hub",
+  "name": "930text",
   "private": true,
   "version": "2026.14.0",
   "type": "module",
@@ -17,6 +17,7 @@
     "@vitejs/plugin-react": "^6.1.1",
     "dotenv": "^17.2.3",
     "express": "^4.21.2",
+    "jspdf": "^4.2.1",
     "lucide-react": "^0.546.0",
     "motion": "^12.23.24",
     "qrcode": "^1.5.4",

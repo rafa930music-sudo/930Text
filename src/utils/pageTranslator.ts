@@ -284,7 +284,9 @@ const STATIC_UI_DICTIONARY: Record<string, Record<string, string>> = {
     'Correo directo': 'Direct email',
     'Donar en PayPal': 'Donate on PayPal',
     'Donar voluntariamente en PayPal': 'Donate voluntarily on PayPal',
-    'Historial local': 'Local history'
+    'Historial local': 'Local history',
+    'PDF Editorial Maquetado (.pdf)': 'Formatted Editorial PDF (.pdf)',
+    'Recomendado': 'Recommended'
   },
   fr: {
     'Suites (10)': 'Suites (10)',

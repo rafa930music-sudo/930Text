@@ -49,6 +49,7 @@ import {
   buildSerpPreview,
   encodeWorkspaceShareHash,
   decodeWorkspaceShareHash,
+  exportToPdfDocument,
   exportToWordDoc,
   exportToMarkdown,
   exportToJson
@@ -128,6 +129,42 @@ interface ToastMsg {
   kind: 'ok' | 'error';
 }
 
+interface BeforeInstallPromptEvent extends Event {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed'; platform?: string }>;
+}
+
+interface SpeechRecognitionResultItemLike {
+  readonly transcript: string;
+  readonly confidence: number;
+}
+
+interface SpeechRecognitionResultLike {
+  readonly [index: number]: SpeechRecognitionResultItemLike;
+  readonly length: number;
+}
+
+interface SpeechRecognitionEventLike extends Event {
+  readonly results: {
+    readonly [index: number]: SpeechRecognitionResultLike;
+    readonly length: number;
+  };
+}
+
+interface SpeechRecognitionInstanceLike {
+  lang: string;
+  interimResults: boolean;
+  maxAlternatives: number;
+  onresult: ((event: SpeechRecognitionEventLike) => void) | null;
+  onerror: ((event: Event) => void) | null;
+  onend: (() => void) | null;
+  start: () => void;
+  stop?: () => void;
+  abort?: () => void;
+}
+
+type SpeechRecognitionCtor = new () => SpeechRecognitionInstanceLike;
+
 const TOOL_CATALOG = [
   {
     id: 'fuente',
@@ -135,7 +172,7 @@ const TOOL_CATALOG = [
     href: '#fuente',
     title: 'Fuentes Unicode Pro',
     subtitle: '44 familias + 14 marcos para redes, bios y titulares',
-    sample: '𝐓𝐞𝐱𝐭𝐨𝐓𝐨𝐝𝐨 · 𝔊ó𝔱𝔦𝔠𝔬 · 𝒜𝓇𝓉ℯ',
+    sample: '𝟗𝟑𝟎𝐓𝐞𝐱𝐭 · 𝔊ó𝔱𝔦𝔠𝔬 · 𝒜𝓇𝓉ℯ',
     search: 'fuentes unicode tipografias instagram whatsapp tiktok linkedin bios negrita cursiva gotico vaporwave marcos',
     featured: true,
     icon: Type
@@ -146,7 +183,7 @@ const TOOL_CATALOG = [
     href: '#traductor',
     title: 'Traductor Universal (105+ Idiomas)',
     subtitle: 'Todos los idiomas del mundo con voz neural, filtro rápido y espejo bilingüe',
-    sample: 'ES ⇄ EN · FR · ZH · JA · AR · CA · EU · GL +100',
+    sample: '🇪🇸 ⇄ 🇬🇧 · 🇫🇷 · 🇩🇪 · 🇵🇹 · 🇮🇹 · 🇨🇳 · 🇯🇵 +100',
     search: 'traducir traduccion todos los idiomas ingles frances aleman portugues italiano chino japones arabe ruso catalan gallego euskera latin voz',
     icon: Languages
   },
@@ -206,7 +243,7 @@ const TOOL_CATALOG = [
     href: '#rimar',
     title: 'Rimar Multi-Idioma & Diccionario',
     subtitle: `${DICTIONARY_TOTAL_WORDS.toLocaleString('es-ES')}+ voces + Rimas en 7 idiomas, estrofas automáticas, métrica y BPM`,
-    sample: '[A · 11 síl.] ES · EN · FR · PT · IT · DE · CA',
+    sample: '[A · 11 síl.] 🇪🇸 · 🇬🇧 · 🇫🇷 · 🇵🇹 · 🇮🇹 · 🇩🇪 · 🇦🇷',
     search: 'rimar rimas diccionario espanol ingles frances portugues italiano aleman catalan definiciones sinonimos musica poesia rap cantante compositor letras cancion versos barras metronomo multisilabicas',
     featuredMusic: true,
     icon: Music
@@ -291,7 +328,7 @@ export default function App() {
   // Global Website Language State (Translates the entire page into 105+ languages)
   const [siteLang, setSiteLang] = useState<string>(() => {
     try {
-      return localStorage.getItem('930text-site-lang') || localStorage.getItem('textotodo-site-lang') || 'es';
+      return localStorage.getItem('930text-site-lang') || 'es';
     } catch {
       return 'es';
     }
@@ -549,9 +586,9 @@ export default function App() {
   const startVoiceDictation = useCallback(
     (targetKey: string, setter: React.Dispatch<React.SetStateAction<string>>, lang = 'es-ES') => {
       const SpeechRec =
-        (window as unknown as { SpeechRecognition?: new () => any; webkitSpeechRecognition?: new () => any })
+        (window as unknown as { SpeechRecognition?: SpeechRecognitionCtor; webkitSpeechRecognition?: SpeechRecognitionCtor })
           .SpeechRecognition ||
-        (window as unknown as { webkitSpeechRecognition?: new () => any }).webkitSpeechRecognition;
+        (window as unknown as { webkitSpeechRecognition?: SpeechRecognitionCtor }).webkitSpeechRecognition;
       if (!SpeechRec) {
         addToast('Tu navegador no soporta dictado por voz directo (usa Chrome, Edge o Safari)', 'error');
         return;
@@ -567,7 +604,7 @@ export default function App() {
         rec.maxAlternatives = 1;
         setDictatingTarget(targetKey);
         addToast('🎙️ Escuchando… Habla ahora para dictar tu texto', 'ok');
-        rec.onresult = (event: any) => {
+        rec.onresult = (event: SpeechRecognitionEventLike) => {
           const transcript = event?.results?.[0]?.[0]?.transcript || '';
           if (transcript.trim()) {
             setter(prev => (prev.trim() ? `${prev.trim()} ${transcript.trim()}` : transcript.trim()));
@@ -643,7 +680,7 @@ export default function App() {
   // Local History & Recents
   const [history, setHistory] = useState<HistoryItem[]>(() => {
     try {
-      return JSON.parse(localStorage.getItem('930text-history') || localStorage.getItem('textotodo-history') || '[]');
+      return JSON.parse(localStorage.getItem('930text-history') || '[]');
     } catch {
       return [];
     }
@@ -652,7 +689,7 @@ export default function App() {
 
   const [recentTools, setRecentTools] = useState<string[]>(() => {
     try {
-      return JSON.parse(localStorage.getItem('930text-recents') || localStorage.getItem('textotodo-recents') || '[]');
+      return JSON.parse(localStorage.getItem('930text-recents') || '[]');
     } catch {
       return [];
     }
@@ -743,13 +780,13 @@ export default function App() {
   });
 
   // PWA Install Prompt State & Handler
-  const [installPromptEvent, setInstallPromptEvent] = useState<any>(null);
+  const [installPromptEvent, setInstallPromptEvent] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstallModalOpen, setIsInstallModalOpen] = useState(false);
 
   useEffect(() => {
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
-      setInstallPromptEvent(e);
+      setInstallPromptEvent(e as BeforeInstallPromptEvent);
     };
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
     return () => {
@@ -946,7 +983,6 @@ export default function App() {
     try {
       return JSON.parse(
         localStorage.getItem('930text-fav-fonts') ||
-        localStorage.getItem('textotodo-fav-fonts') ||
         '["bold","sansBold","script","smallCaps"]'
       );
     } catch {
@@ -1555,6 +1591,15 @@ export default function App() {
     return () => clearInterval(id);
   }, [isMetronomePlaying, bpm, rhythmMode]);
 
+  // Clean up AudioContext on unmount to prevent audio leaks
+  useEffect(() => {
+    return () => {
+      if (audioCtxRef.current && audioCtxRef.current.state !== 'closed') {
+        audioCtxRef.current.close().catch(() => {});
+      }
+    };
+  }, []);
+
   // ---------------------------------------------------------------------------
   // 9. AUTOPILOT 1-CLICK PIPELINE & ENTERPRISE LAB STATE (SUITES 09 & 10)
   // ---------------------------------------------------------------------------
@@ -1580,7 +1625,7 @@ export default function App() {
   const [citeYear, setCiteYear] = useState(String(new Date().getFullYear()));
   const [citeTitle, setCiteTitle] = useState('Arquitectura de herramientas lingüísticas y productividad en el navegador');
   const [citeSource, setCiteSource] = useState('930Text Editorial');
-  const [citeUrl, setCiteUrl] = useState('https://textotodooficial-hub.github.io/TextoTodo/');
+  const [citeUrl, setCiteUrl] = useState('https://rafa930music-sudo.github.io/930Text/');
   const citationsOutput = useMemo(
     () =>
       generateAcademicCitations({
@@ -1804,7 +1849,6 @@ export default function App() {
       try {
         const prev = JSON.parse(
           localStorage.getItem('930text-feedback') ||
-          localStorage.getItem('textotodo-feedback') ||
           '[]'
         );
         prev.unshift({
@@ -2210,13 +2254,19 @@ export default function App() {
               }}
               title="Cambiar el idioma de toda la página web (105+ idiomas)"
               aria-label="Cambiar idioma de toda la página web"
-              className="inline-flex items-center gap-1.5 min-h-[40px] px-3 sm:px-3.5 rounded-xl border border-[var(--brand2)]/45 bg-[var(--brand-soft)] text-xs sm:text-sm font-extrabold text-[var(--text)] hover:border-[var(--brand2)] transition whitespace-nowrap shrink-0 shadow-xs"
+              className="inline-flex items-center gap-2 min-h-[40px] px-3 sm:px-3.5 rounded-xl border border-[var(--brand2)]/45 bg-[var(--brand-soft)] text-xs sm:text-sm font-extrabold text-[var(--text)] hover:border-[var(--brand2)] transition whitespace-nowrap shrink-0 shadow-xs"
             >
-              <span data-no-i18n="true" className="text-sm">{currentSiteLangMeta.flag}</span>
-              <span data-no-i18n="true" className="uppercase">{currentSiteLangMeta.code.split('-')[0]}</span>
-              <span className="hidden sm:inline text-xs text-[var(--brand2)] font-bold">
-                {isSiteTranslating ? 'Traduciendo…' : 'Idioma'}
-              </span>
+              <span data-no-i18n="true" className="text-base leading-none">{currentSiteLangMeta.flag}</span>
+              <span data-no-i18n="true" className="font-extrabold text-xs sm:text-sm">{currentSiteLangMeta.name}</span>
+              {isSiteTranslating ? (
+                <span className="text-[11px] text-[var(--brand2)] font-bold animate-pulse">
+                  Traduciendo…
+                </span>
+              ) : (
+                <span className="hidden md:inline text-[11px] text-[var(--brand2)] font-bold">
+                  (105+)
+                </span>
+              )}
             </button>
 
             <button
@@ -3199,7 +3249,7 @@ export default function App() {
                     </button>
                     <button
                       type="button"
-                      onClick={() => saveToHistory(`Traducción (${transFrom}→${transTo})`, transInput, transOutput)}
+                      onClick={() => saveToHistory(`Traducción (${getLanguageByCode(transFrom).flag} → ${getLanguageByCode(transTo).flag})`, transInput, transOutput)}
                       className="h-9 px-3.5 rounded-xl border border-[var(--line)] bg-[var(--surface)] text-xs font-bold hover:border-[var(--brand)] inline-flex items-center justify-center gap-1.5 whitespace-nowrap shrink-0"
                     >
                       <Bookmark className="w-3.5 h-3.5 shrink-0" /> Guardar
@@ -3215,14 +3265,18 @@ export default function App() {
                           .filter(Boolean);
                         const max = Math.max(srcLines.length, dstLines.length);
                         const rows: string[] = [];
+                        const fromName = getLanguageByCode(transFrom).name;
+                        const toName = getLanguageByCode(transTo).name;
+                        const fromFlag = getLanguageByCode(transFrom).flag;
+                        const toFlag = getLanguageByCode(transTo).flag;
                         for (let i = 0; i < max; i++) {
                           rows.push(
-                            `[${i + 1}] ORIGINAL (${transFrom.toUpperCase()}): ${srcLines[i] || '—'}\n    TRADUCCIÓN (${transTo.toUpperCase()}): ${dstLines[i] || '—'}`
+                            `[${i + 1}] ORIGINAL (${fromFlag} ${fromName}): ${srcLines[i] || '—'}\n    TRADUCCIÓN (${toFlag} ${toName}): ${dstLines[i] || '—'}`
                           );
                         }
                         downloadTxt(
                           `930text-espejo-bilingue-${transFrom}-${transTo}.txt`,
-                          `DOSSIER BILINGÜE ESPEJO FRASE A FRASE · 930TEXT\n=================================================\nIdiomas: ${transFrom.toUpperCase()} → ${transTo.toUpperCase()}\n\n${rows.join('\n\n')}`
+                          `DOSSIER BILINGÜE ESPEJO FRASE A FRASE · 930TEXT\n=================================================\nIdiomas: ${fromFlag} ${fromName} → ${toFlag} ${toName}\n\n${rows.join('\n\n')}`
                         );
                       }}
                       className="h-9 px-3.5 rounded-xl border border-[var(--brand2)]/45 bg-[var(--brand-soft)] text-xs font-extrabold text-[var(--brand2)] hover:brightness-110 inline-flex items-center justify-center gap-1.5 whitespace-nowrap shrink-0"
@@ -3244,9 +3298,9 @@ export default function App() {
                     ['de', '🇩🇪 Alemán'],
                     ['pt', '🇵🇹 Portugués'],
                     ['it', '🇮🇹 Italiano'],
-                    ['ca', '🏴 Catalán'],
-                    ['gl', '🏴 Gallego'],
-                    ['eu', '🏴 Euskera'],
+                    ['ca', '🟡🔴 Catalán'],
+                    ['gl', '⚪🔵 Gallego'],
+                    ['eu', '🟢🔴 Euskera'],
                     ['zh-CN', '🇨🇳 Chino'],
                     ['ja', '🇯🇵 Japonés'],
                     ['ko', '🇰🇷 Coreano'],
@@ -4977,7 +5031,7 @@ export default function App() {
                         ['pt', '🇵🇹 Português', 'coração'],
                         ['it', '🇮🇹 Italiano', 'amore'],
                         ['de', '🇩🇪 Deutsch', 'Nacht'],
-                        ['ca', '🏴 Català', 'llibertat']
+                        ['ca', '🟡🔴 Català', 'llibertat']
                       ] as const
                     ).map(([lCode, lLabel, defaultWord]) => (
                       <button
@@ -6396,8 +6450,8 @@ export default function App() {
                 data-no-i18n="true"
                 className="h-10 px-2.5 rounded-xl border border-[var(--brand2)]/45 bg-[var(--brand-soft)] text-xs font-bold inline-flex items-center justify-center gap-1.5 truncate"
               >
-                <span>{currentSiteLangMeta.flag}</span>
-                <span className="truncate">Idioma ({currentSiteLangMeta.code.split('-')[0].toUpperCase()})</span>
+                <span className="text-base">{currentSiteLangMeta.flag}</span>
+                <span className="truncate">{currentSiteLangMeta.name}</span>
               </button>
               <button
                 type="button"
@@ -7321,8 +7375,8 @@ export default function App() {
           }}
           className="h-9 px-2.5 rounded-xl border border-transparent hover:border-[var(--line)] bg-[var(--surface2)] text-xs font-bold text-[var(--text)] inline-flex items-center gap-1.5 transition shrink-0"
         >
-          <span>{currentSiteLangMeta.flag}</span>
-          <span className="uppercase">{currentSiteLangMeta.code.split('-')[0]}</span>
+          <span className="text-base leading-none">{currentSiteLangMeta.flag}</span>
+          <span className="font-bold text-xs">{currentSiteLangMeta.name}</span>
         </button>
 
         <button
@@ -7418,7 +7472,29 @@ export default function App() {
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2">
-                {/* 1. Word .doc */}
+                {/* 1. PDF Editorial Maquetado */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    const slug = exportDocTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 30) || 'documento';
+                    exportToPdfDocument(`${slug}.pdf`, exportDocTitle, exportDocContent, 'Documento Oficial 930Text');
+                    addToast('Descargado PDF editorial maquetado (.pdf) con éxito', 'ok');
+                  }}
+                  className="p-3 rounded-2xl border border-[var(--line)] bg-[var(--surface2)]/80 hover:border-rose-500 text-left transition flex items-center gap-3 group sm:col-span-2"
+                >
+                  <span className="w-10 h-10 rounded-xl grid place-items-center bg-rose-500/10 text-rose-500 font-black text-xs shrink-0 group-hover:scale-105 transition">
+                    PDF
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2">
+                      <strong className="block text-xs font-extrabold text-[var(--text)]">PDF Editorial Maquetado (.pdf)</strong>
+                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-rose-500/15 text-rose-500">Recomendado</span>
+                    </div>
+                    <span className="text-[11px] text-[var(--muted)] block">Diseño A4 con membrete 930Text, tipografía nítida y paginación</span>
+                  </div>
+                </button>
+
+                {/* 2. Word .doc */}
                 <button
                   type="button"
                   onClick={() => {
@@ -7437,7 +7513,7 @@ export default function App() {
                   </div>
                 </button>
 
-                {/* 2. Markdown .md */}
+                {/* 3. Markdown .md */}
                 <button
                   type="button"
                   onClick={() => {
@@ -7456,7 +7532,7 @@ export default function App() {
                   </div>
                 </button>
 
-                {/* 3. JSON .json */}
+                {/* 4. JSON .json */}
                 <button
                   type="button"
                   onClick={() => {
@@ -7482,7 +7558,7 @@ export default function App() {
                   </div>
                 </button>
 
-                {/* 4. TXT Puro */}
+                {/* 5. TXT Puro */}
                 <button
                   type="button"
                   onClick={() => {

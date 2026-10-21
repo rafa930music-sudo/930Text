@@ -19,7 +19,7 @@
     <script>
       (function () {
         try {
-          var t = localStorage.getItem('930text-theme') || localStorage.getItem('textotodo-theme');
+          var t = localStorage.getItem('930text-theme');
           if (t === 'light') {
             document.documentElement.setAttribute('data-theme', 'light');
             document.documentElement.style.backgroundColor = '#f6f8fc';
@@ -112,7 +112,7 @@
     <script>
       (function () {
         try {
-          var saved = localStorage.getItem('930text-theme') || localStorage.getItem('textotodo-theme');
+          var saved = localStorage.getItem('930text-theme');
           var mode =
             saved === 'dark' || saved === 'light'
               ? saved

@@ -6,6 +6,7 @@ import {
   convertTextFormat
 } from './textTools';
 import { findRhymes, analyzeStanzaScheme } from './rhymeTools';
+import jsPDF from 'jspdf';
 
 // ============================================================================
 // 1. AUTOPILOT WORKFLOW PIPELINE ("1-CLICK MASTER PIPELINE")
@@ -269,7 +270,7 @@ export function generateAcademicCitations(input: CitationInput): CitationResult 
   const year = (input.year || String(new Date().getFullYear())).trim();
   const title = (input.title || 'Guía de procesamiento de texto y productividad digital').trim();
   const source = (input.publisherOrSite || '930Text Editorial').trim();
-  const url = (input.url || 'https://textotodooficial-hub.github.io/TextoTodo/').trim();
+  const url = (input.url || 'https://rafa930music-sudo.github.io/930Text/').trim();
   const accessed = (input.accessDate || new Date().toLocaleDateString('es-ES')).trim();
 
   const slugKey =
@@ -560,7 +561,7 @@ export function buildSerpPreview(
   customDomain?: string
 ): SerpPreviewData {
   const clean = (rawText || '').trim().replace(/\s+/g, ' ');
-  const domain = (customDomain || 'textotodooficial-hub.github.io/TextoTodo').trim().replace(/^https?:\/\//i, '').replace(/\/+$/, '') || 'textotodooficial-hub.github.io/TextoTodo';
+  const domain = (customDomain || 'rafa930music-sudo.github.io/930Text').trim().replace(/^https?:\/\//i, '').replace(/\/+$/, '') || 'rafa930music-sudo.github.io/930Text';
   const firstSentence = clean.split(/[.!?]/)[0]?.trim() || 'Plataforma Todo en Uno de Productividad y Texto';
   const generatedTitle =
     (customTitle?.trim() || convertTextFormat(firstSentence.slice(0, 62), 'title')) + ' | 930Text';
@@ -711,7 +712,7 @@ generator: "930Text Suite"
 ${textContent}
 
 ---
-*Documento exportado con [930Text](https://textotodooficial-hub.github.io/TextoTodo/) — Plataforma 10 en 1 de Productividad Lingüística.*
+*Documento exportado con [930Text](https://rafa930music-sudo.github.io/930Text/) — Plataforma 10 en 1 de Productividad Lingüística.*
 `;
 
   const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
@@ -737,5 +738,134 @@ export function exportToJson(filename: string, data: unknown) {
   document.body.removeChild(a);
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
+
+export function exportToPdfDocument(
+  filename: string,
+  title: string,
+  textContent: string,
+  subtitle?: string
+): void {
+  const doc = new jsPDF({
+    orientation: 'portrait',
+    unit: 'pt',
+    format: 'a4'
+  });
+
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
+  const marginX = 45;
+  const marginTop = 50;
+  const marginBottom = 50;
+  const contentWidth = pageWidth - marginX * 2;
+
+  let currentY = marginTop;
+
+  // Header band
+  doc.setFillColor(79, 70, 229); // #4F46E5 Indigo
+  doc.rect(marginX, currentY, 4, 32, 'F');
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(16);
+  doc.setTextColor(15, 23, 42); // #0F172A
+  doc.text('930Text', marginX + 12, currentY + 14);
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(8.5);
+  doc.setTextColor(100, 116, 139); // #64748B
+  const dateStr = new Date().toLocaleDateString('es-ES', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+  doc.text(`Documento Editorial Oficial · ${dateStr}`, marginX + 12, currentY + 28);
+
+  currentY += 45;
+
+  // Horizontal divider
+  doc.setDrawColor(226, 232, 240); // #E2E8F0
+  doc.setLineWidth(1);
+  doc.line(marginX, currentY, pageWidth - marginX, currentY);
+
+  currentY += 24;
+
+  // Document Title
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(16);
+  doc.setTextColor(30, 41, 59); // #1E293B
+  const safeTitle = title.trim() || 'Documento 930Text';
+  const splitTitle = doc.splitTextToSize(safeTitle, contentWidth);
+  doc.text(splitTitle, marginX, currentY);
+  currentY += splitTitle.length * 20;
+
+  if (subtitle && subtitle.trim()) {
+    doc.setFont('helvetica', 'italic');
+    doc.setFontSize(9.5);
+    doc.setTextColor(100, 116, 139);
+    const splitSub = doc.splitTextToSize(subtitle.trim(), contentWidth);
+    doc.text(splitSub, marginX, currentY);
+    currentY += splitSub.length * 14 + 6;
+  }
+
+  currentY += 10;
+
+  // Document Body
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(10.5);
+  doc.setTextColor(51, 65, 85); // #334155
+
+  const lineHeight = 16;
+  const paragraphs = (textContent || '').split(/\n\s*\n/);
+
+  for (const paragraph of paragraphs) {
+    const trimmed = paragraph.trim();
+    if (!trimmed) continue;
+
+    const lines = doc.splitTextToSize(trimmed, contentWidth);
+    for (const line of lines) {
+      if (currentY + lineHeight > pageHeight - marginBottom) {
+        doc.addPage();
+        currentY = marginTop;
+
+        // Running page header
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(8);
+        doc.setTextColor(148, 163, 184);
+        doc.text('930Text · Documento Editorial', marginX, currentY - 15);
+        doc.setDrawColor(226, 232, 240);
+        doc.setLineWidth(0.5);
+        doc.line(marginX, currentY - 8, pageWidth - marginX, currentY - 8);
+      }
+      doc.text(line, marginX, currentY);
+      currentY += lineHeight;
+    }
+    currentY += 8; // Paragraph spacing
+  }
+
+  // Draw footers on all pages
+  const totalPages = doc.getNumberOfPages();
+  for (let i = 1; i <= totalPages; i++) {
+    doc.setPage(i);
+    doc.setDrawColor(226, 232, 240);
+    doc.setLineWidth(0.75);
+    doc.line(marginX, pageHeight - marginBottom + 15, pageWidth - marginX, pageHeight - marginBottom + 15);
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(8);
+    doc.setTextColor(148, 163, 184);
+    doc.text(
+      '930Text — 10 Suites de Productividad Lingüística · https://rafa930music-sudo.github.io/930Text/',
+      marginX,
+      pageHeight - marginBottom + 30
+    );
+
+    const pageStr = `Página ${i} de ${totalPages}`;
+    const pageStrWidth = doc.getTextWidth(pageStr);
+    doc.text(pageStr, pageWidth - marginX - pageStrWidth, pageHeight - marginBottom + 30);
+  }
+
+  const safeFilename = filename.endsWith('.pdf') ? filename : `${filename}.pdf`;
+  doc.save(safeFilename);
+}
+
 
 

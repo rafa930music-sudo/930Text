@@ -251,7 +251,7 @@ export function generateSocialCardBlob(options: SocialCardOptions): Promise<Blob
     // Subtle verified indicator
     ctx.font = '600 14px system-ui, -apple-system, sans-serif';
     ctx.fillStyle = isDark ? '#94A3B8' : '#64748B';
-    const webText = '930text.app';
+    const webText = '930Text';
     const webWidth = ctx.measureText(webText).width;
     ctx.fillText(webText, cardX + cardW - 45 - webWidth, footerY);
     ctx.restore();

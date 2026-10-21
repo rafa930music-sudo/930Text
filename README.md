@@ -1,13 +1,13 @@
-# 930Text (`rafa930music-sudo`) — 10 Suites de Texto, Diccionario Español y Productividad
+# 930Text (`930Text`) — 10 Suites de Texto, Diccionario Español y Productividad
 
-Tu repositorio **`rafa930music-sudo`** (**TextoTodo Pro**) está 100% configurado, auditado y listo para publicarse en **GitHub Pages**, indexar las **10 suites** en Google y recibir donaciones voluntarias por PayPal y valoraciones directamente en **`rafa930.music@gmail.com`**.
+Tu repositorio **`930Text`** está 100% configurado, auditado y listo para publicarse en **GitHub Pages** (`https://rafa930music-sudo.github.io/930Text/`), indexar las **10 suites** en Google y recibir donaciones voluntarias por PayPal y valoraciones directamente en **`rafa.930music@gmail.com`**.
 
 ---
 
 ## 🛠️ Las 10 Suites Profesionales Incluidas (100% Gratuitas en el Navegador)
 
 1. **01 · Fuentes Unicode Pro (`#fuente`)** — **44 familias tipográficas** (Serif, Sans, Script, Fraktur, Monospace, Subrayado, Tachado, Vaporwave, Burbujas, etc.) + **14 marcos decorativos** listos para copiar en Instagram, TikTok, YouTube, WhatsApp, Discord, LinkedIn y X.
-2. **02 · Traductor Multilingüe con Voz (`#traductor`)** — Traducción instantánea entre Español, Inglés, Francés, Portugués, Italiano y Alemán con control de velocidad de voz (`0.8x`, `1x`, `1.2x`), importación de archivos y descarga bilingüe `.TXT`.
+2. **02 · Traductor Multilingüe con Voz (`#traductor`)** — Traducción instantánea entre más de 105 idiomas con control de velocidad de voz (`0.8x`, `1x`, `1.2x`), importación de archivos y descarga bilingüe `.TXT`.
 3. **03 · Resumidor Pro 6 en 1 (`#resumidor`)** — Motor híbrido extractivo y de compresión con dictado por voz y **6 formatos de salida**:
    - *Ficha ejecutiva* (Idea central + Puntos clave + Conclusión + Conceptos clave)
    - *Puntos clave (Viñetas)*
@@ -32,25 +32,24 @@ Tu repositorio **`rafa930music-sudo`** (**TextoTodo Pro**) está 100% configurad
 
 ---
 
-## 🚀 Cómo Publicar o Actualizar `textotodooficial-hub` en GitHub Pages (Coste 0 €)
+## 🚀 Cómo Publicar o Actualizar `930Text` en GitHub Pages (Coste 0 €)
 
-1. **Sube o sincroniza este código con tu repositorio `textotodooficial-hub`** (rama `main`).
-2. En GitHub, entra en tu repositorio **`textotodooficial-hub` → Settings → Pages**.
+1. **Sube o sincroniza este código con tu repositorio `930Text`** (rama `main`).
+2. En GitHub, entra en tu repositorio **`930Text` → Settings → Pages**.
 3. En **Build and deployment → Source**, selecciona **GitHub Actions**.
    - El flujo `.github/workflows/deploy.yml` ya incluido compila el proyecto (`npm run build`), genera `404.html` y `.nojekyll`, y despliega automáticamente en menos de 1 minuto.
-   - Además, el archivo `vite.config.ts` usa `base: './'`, por lo que todos los archivos, iconos, Service Worker y PWA funcionan tanto en subruta de GitHub Pages (`.../textotodooficial-hub/`) como en dominio propio o raíz.
+   - Además, el archivo `vite.config.ts` usa `base: './'`, por lo que todos los archivos, iconos, Service Worker y PWA funcionan tanto en subruta de GitHub Pages (`https://rafa930music-sudo.github.io/930Text/`) como en dominio propio o raíz.
 
 ---
 
-## 📬 Cómo Activar la Recepción de Valoraciones en `textotodo.oficial@gmail.com`
+## 📬 Recepción de Valoraciones
 
 1. Abre tu web publicada y baja hasta la sección **Valoraciones (`#valoracion`)**.
-2. Envía tú mismo una primera valoración de prueba.
-3. **FormSubmit** enviará un correo automático a **`textotodo.oficial@gmail.com`** con el botón **"Confirm / Activate Form"**.
-4. Pulsa ese botón una sola vez. A partir de ese momento, todas las valoraciones y sugerencias que envíen los usuarios llegarán directamente a **`textotodo.oficial@gmail.com`**.
+2. Envía una valoración de prueba.
+3. Las sugerencias y comentarios se procesan directamente para **930Text**. Contacto del creador: **`rafa.930music@gmail.com`**.
 
 ---
 
 ## ⚖️ Nota Legal y Exención de Responsabilidad Incluida
 
-Tanto el pie de página como el modal legal y el modal de donaciones dejan explícito que **TextoTodo se ofrece de forma 100% gratuita «tal cual» (*as-is*)**, y que el creador no se hace responsable si alguna herramienta, traducción, descarga o función no llega a funcionar o presenta errores en el dispositivo del usuario. Contacto oficial: **`textotodo.oficial@gmail.com`**.
+Tanto el pie de página como el modal legal y el modal de donaciones dejan explícito que **930Text se ofrece de forma 100% gratuita «tal cual» (*as-is*)**, y que el creador no se hace responsable si alguna herramienta, traducción, descarga o función no llega a funcionar o presenta errores en el dispositivo del usuario. Contacto oficial: **`rafa.930music@gmail.com`**.
