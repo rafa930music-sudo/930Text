@@ -792,7 +792,7 @@ export function exportToPdfDocument(
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(16);
   doc.setTextColor(30, 41, 59); // #1E293B
-  const safeTitle = title.trim() || 'Documento 930Text';
+  const safeTitle = (title || 'Documento 930Text').trim();
   const splitTitle = doc.splitTextToSize(safeTitle, contentWidth);
   doc.text(splitTitle, marginX, currentY);
   currentY += splitTitle.length * 20;
@@ -806,39 +806,90 @@ export function exportToPdfDocument(
     currentY += splitSub.length * 14 + 6;
   }
 
-  currentY += 10;
+  currentY += 12;
 
-  // Document Body
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(10.5);
-  doc.setTextColor(51, 65, 85); // #334155
+  // Document Body — Markdown-aware editorial rendering
+  const paragraphs = (textContent || '').split(/\r?\n/);
+  const checkPageBreak = (neededHeight: number) => {
+    if (currentY + neededHeight > pageHeight - marginBottom) {
+      doc.addPage();
+      currentY = marginTop;
 
-  const lineHeight = 16;
-  const paragraphs = (textContent || '').split(/\n\s*\n/);
+      // Running page header
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(8);
+      doc.setTextColor(148, 163, 184);
+      doc.text('930Text · Documento Editorial', marginX, currentY - 15);
+      doc.setDrawColor(226, 232, 240);
+      doc.setLineWidth(0.5);
+      doc.line(marginX, currentY - 8, pageWidth - marginX, currentY - 8);
+    }
+  };
 
-  for (const paragraph of paragraphs) {
-    const trimmed = paragraph.trim();
-    if (!trimmed) continue;
+  for (let i = 0; i < paragraphs.length; i++) {
+    const rawLine = paragraphs[i];
+    const trimmed = rawLine.trim();
 
+    if (!trimmed) {
+      currentY += 8;
+      continue;
+    }
+
+    // Markdown Header (e.g. # Header or ## Header)
+    if (trimmed.startsWith('# ') || trimmed.startsWith('## ') || trimmed.startsWith('### ')) {
+      const headingText = trimmed.replace(/^#+\s*/, '');
+      checkPageBreak(30);
+      currentY += 6;
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(12);
+      doc.setTextColor(79, 70, 229); // Brand Indigo
+      const lines = doc.splitTextToSize(headingText, contentWidth);
+      for (const line of lines) {
+        checkPageBreak(18);
+        doc.text(line, marginX, currentY);
+        currentY += 16;
+      }
+      currentY += 4;
+      continue;
+    }
+
+    // Horizontal Rule (--- or ===)
+    if (/^[-=_]{3,}$/.test(trimmed)) {
+      checkPageBreak(16);
+      doc.setDrawColor(226, 232, 240);
+      doc.setLineWidth(0.75);
+      doc.line(marginX, currentY + 4, pageWidth - marginX, currentY + 4);
+      currentY += 14;
+      continue;
+    }
+
+    // Bullet point / list item (- or * or 1.)
+    if (/^[-*•]\s+/.test(trimmed) || /^\d+\.\s+/.test(trimmed)) {
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(10.5);
+      doc.setTextColor(51, 65, 85);
+      const bulletText = trimmed.replace(/^[-*•]\s+/, '• ');
+      const lines = doc.splitTextToSize(bulletText, contentWidth - 10);
+      for (let l = 0; l < lines.length; l++) {
+        checkPageBreak(16);
+        const indent = l === 0 ? marginX : marginX + 12;
+        doc.text(lines[l], indent, currentY);
+        currentY += 15;
+      }
+      continue;
+    }
+
+    // Regular body paragraph
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10.5);
+    doc.setTextColor(51, 65, 85);
     const lines = doc.splitTextToSize(trimmed, contentWidth);
     for (const line of lines) {
-      if (currentY + lineHeight > pageHeight - marginBottom) {
-        doc.addPage();
-        currentY = marginTop;
-
-        // Running page header
-        doc.setFont('helvetica', 'normal');
-        doc.setFontSize(8);
-        doc.setTextColor(148, 163, 184);
-        doc.text('930Text · Documento Editorial', marginX, currentY - 15);
-        doc.setDrawColor(226, 232, 240);
-        doc.setLineWidth(0.5);
-        doc.line(marginX, currentY - 8, pageWidth - marginX, currentY - 8);
-      }
+      checkPageBreak(16);
       doc.text(line, marginX, currentY);
-      currentY += lineHeight;
+      currentY += 15;
     }
-    currentY += 8; // Paragraph spacing
+    currentY += 4;
   }
 
   // Draw footers on all pages

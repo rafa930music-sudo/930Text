@@ -417,7 +417,7 @@ export function findRhymes(
     }
   }
 
-  // Universal dynamic rhyme fallback for ANY of the 105+ world languages (no limits)
+  // Universal dynamic rhyme fallback for ANY of the world languages (no limits)
   const tail = baseNorm.length >= 3 ? baseNorm.slice(-3) : baseNorm;
   const universalGenerated: RhymeSuggestion[] = [];
   const prefixes = ['a', 'be', 'de', 're', 'pro', 'sub', 'inter', 'trans', 'ex', 'per', 'con', 'in', 'un', 'dis', 'mis', 'sur', 'auto', 'bio', 'geo', 'mega'];

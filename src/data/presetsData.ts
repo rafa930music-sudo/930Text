@@ -2,6 +2,8 @@
 // 930TEXT — PLANTILLAS UNIVERSALES Y CASOS DE USO PARA TODO EL MUNDO
 // ============================================================================
 
+import { CATALOG } from '../config/catalog';
+
 export interface UniversalPreset {
   id: string;
   audience: 'estudiantes' | 'trabajo' | 'creadores' | 'musica' | 'negocios';
@@ -48,7 +50,7 @@ export const UNIVERSAL_PRESETS: UniversalPreset[] = [
     audience: 'creadores',
     audienceLabel: 'Redes Sociales y Marcas',
     title: 'Destacar biografía y titulares en Instagram / TikTok / LinkedIn',
-    description: 'Genera 44 fuentes Unicode con 14 marcos elegantes que llaman la atención en el feed.',
+    description: `Genera ${CATALOG.FONT_FAMILIES} fuentes Unicode con ${CATALOG.FRAMES} marcos elegantes que llaman la atención en el feed.`,
     targetToolId: 'fuente',
     sampleText: 'Comunicación clara, estrategia digital y resultados reales ✨'
   },

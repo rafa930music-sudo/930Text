@@ -1,11 +1,8 @@
 // ============================================================================
-// MOTOR DE TRADUCCIÓN GLOBAL DE TODA LA PÁGINA (UI + 10 SUITES + EJEMPLOS INTERNOS + 105+ IDIOMAS)
-// Traduce automáticamente cualquier texto de la interfaz de 930Text,
-// atributos placeholder, title y aria-label, además de traducir en vivo los
-// textos de ejemplo ("Ej."), borradores y plantillas internas dentro de las cajas
-// de texto para que cualquier usuario del mundo entienda absolutamente todo.
+// MOTOR DE TRADUCCIÓN GLOBAL DE TODA LA PÁGINA (UI + SUITES + EJEMPLOS INTERNOS)
 // ============================================================================
 
+import { CATALOG } from '../config/catalog';
 import { getLanguageByCode } from '../data/languagesData';
 
 const CACHE_STORAGE_KEY = '930text-page-i18n-cache-v2';
@@ -224,7 +221,7 @@ const STATIC_UI_DICTIONARY: Record<string, Record<string, string>> = {
     'Integradas en 1 web': 'Integrated in 1 web app',
     'Voces y rimas en español': 'Words & multilingual rhymes',
     '100% Gratis': '100% Free',
-    'Sin registro ni límites': 'No sign-up or limits',
+    'Sin registro · Hasta 100.000 caracteres por herramienta · Sin coste': 'No sign-up or limits',
     'PRUEBA RÁPIDA EN VIVO': 'LIVE INSTANT DEMO',
     'Transforma cualquier frase al instante': 'Transform any phrase instantly',
     'Formatos': 'Formats',
@@ -243,7 +240,7 @@ const STATIC_UI_DICTIONARY: Record<string, Record<string, string>> = {
     'Ejemplo': 'Example',
     'Vaciar': 'Clear all',
     'Fuentes Unicode Pro': 'Unicode Fonts Pro',
-    'Traductor Universal (105+ Idiomas)': 'Universal Translator (105+ Languages)',
+    [`Traductor Universal (${CATALOG.LANGUAGES_LABEL})`]: 'Universal Translator',
     'Resumidor Extractivo': 'Extractive Summarizer',
     'Corrector de Estilo': 'Style & Grammar Checker',
     'Limpiador Profundo': 'Deep Text Cleaner',
@@ -308,7 +305,7 @@ const STATIC_UI_DICTIONARY: Record<string, Record<string, string>> = {
     '10 Suites': '10 Suites',
     'Integradas en 1 web': 'Intégrées sur 1 site',
     '100% Gratis': '100% Gratuit',
-    'Sin registro ni límites': 'Sans inscription ni limites',
+    'Sin registro · Hasta 100.000 caracteres por herramienta · Sin coste': 'Sans inscription ni limites',
     'PRUEBA RÁPIDA EN VIVO': 'DÉMO EN DIRECT',
     'Transforma cualquier frase al instante': 'Transformez toute phrase instantanément',
     'Formatos': 'Formats',
@@ -356,7 +353,7 @@ const STATIC_UI_DICTIONARY: Record<string, Record<string, string>> = {
     'Ver las 10 Suites': 'Ver as 10 Suítes',
     'Autopilot 5 en 1': 'Autopiloto 5 em 1',
     '100% Gratis': '100% Grátis',
-    'Sin registro ni límites': 'Sem registo nem limites',
+    'Sin registro · Hasta 100.000 caracteres por herramienta · Sin coste': 'Sem registo nem limites',
     'Transforma cualquier frase al instante': 'Transforme qualquer frase instantaneamente',
     'Copiar': 'Copiar',
     'Palabras': 'Palavras',
@@ -393,7 +390,7 @@ const STATIC_UI_DICTIONARY: Record<string, Record<string, string>> = {
     'resuelto en segundos.': 'risolto in pochi secondi.',
     'Ver las 10 Suites': 'Vedi le 10 Suite',
     '100% Gratis': '100% Gratis',
-    'Sin registro ni límites': 'Senza registrazione né limiti',
+    'Sin registro · Hasta 100.000 caracteres por herramienta · Sin coste': 'Senza registrazione né limiti',
     'Copiar': 'Copia',
     'Palabras': 'Parole',
     'Caracteres': 'Caratteri',
@@ -424,7 +421,7 @@ const STATIC_UI_DICTIONARY: Record<string, Record<string, string>> = {
     'resuelto en segundos.': 'in Sekunden gelöst.',
     'Ver las 10 Suites': 'Alle 10 Suiten ansehen',
     '100% Gratis': '100% Kostenlos',
-    'Sin registro ni límites': 'Ohne Registrierung oder Limits',
+    'Sin registro · Hasta 100.000 caracteres por herramienta · Sin coste': 'Ohne Registrierung oder Limits',
     'Copiar': 'Kopieren',
     'Palabras': 'Wörter',
     'Caracteres': 'Zeichen',
@@ -455,7 +452,7 @@ const STATIC_UI_DICTIONARY: Record<string, Record<string, string>> = {
     'resuelto en segundos.': 'resolt en segons.',
     'Ver las 10 Suites': 'Veure les 10 Suites',
     '100% Gratis': '100% Gratis',
-    'Sin registro ni límites': 'Sense registre ni límits',
+    'Sin registro · Hasta 100.000 caracteres por herramienta · Sin coste': 'Sense registre ni límits',
     'Copiar': 'Copiar',
     'Palabras': 'Paraules',
     'Caracteres': 'Caràcters',
@@ -590,7 +587,7 @@ export async function translateSingleDynamicString(text: string, targetLang: str
   return text;
 }
 
-// Returns localized internal examples ("Ej.", sample texts, default words, templates) for ANY of the 105+ languages
+// Returns localized internal examples ("Ej.", sample texts, default words, templates) for ANY of the world languages
 export async function getLocalizedSuiteSamples(targetLang: string): Promise<LocalizedSuiteSamples> {
   if (!targetLang || targetLang === 'es') {
     return BASE_SPANISH_SAMPLES;

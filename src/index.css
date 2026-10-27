@@ -344,23 +344,40 @@ textarea:focus-visible {
 }
 
 @media print {
+  @page {
+    size: A4 portrait;
+    margin: 1.5cm;
+  }
+
   header,
   nav,
   footer,
   aside,
+  #app-discovery,
   .safe-bottom-dock,
   button,
-  .no-print {
+  .no-print,
+  [role="dialog"],
+  [role="navigation"],
+  .fixed {
     display: none !important;
   }
+
+  html,
   body {
     background: #ffffff !important;
+    background-image: none !important;
     color: #090d16 !important;
     padding: 0 !important;
-    margin: 1.5cm !important;
-    font-size: 12pt !important;
+    margin: 0 !important;
+    font-size: 11pt !important;
     line-height: 1.5 !important;
   }
+
+  body::before {
+    display: none !important;
+  }
+
   .studio-console,
   .bento-card {
     border: none !important;
@@ -368,12 +385,14 @@ textarea:focus-visible {
     background: transparent !important;
     padding: 0 !important;
   }
+
   textarea,
   input {
     border: 1px solid #cbd5e1 !important;
     background: transparent !important;
     color: #000000 !important;
   }
+
   h1, h2, h3 {
     color: #000000 !important;
     page-break-after: avoid;

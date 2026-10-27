@@ -442,8 +442,9 @@ export function summarizeTextDetailed(
     };
   });
 
-  // Maximal Marginal Relevance (MMR) selection so we never pick two near-duplicate sentences
-  const targetCount = Math.max(1, Math.min(sentenceCount, candidatePool.length));
+  // Selection: ensure targetCount represents genuine condensation (ratio 0.3 - 0.7)
+  const maxAllowedSentences = Math.max(1, Math.min(sentenceCount, Math.ceil(candidatePool.length * 0.6)));
+  const targetCount = Math.max(1, Math.min(maxAllowedSentences, candidatePool.length));
   const sortedByScore = [...candidatePool].sort((a, b) => b.score - a.score);
   const chosen: typeof candidatePool = [];
 
@@ -477,7 +478,6 @@ export function summarizeTextDetailed(
   if (format === 'bullets') {
     output = selectedCompressed
       .map(s => {
-        // Highlight key concept at the start of the bullet if possible
         const wordsInS = extractWords(s);
         const mainKw = topKeywords.find(kw => wordsInS.includes(kw));
         if (mainKw) {
@@ -488,29 +488,23 @@ export function summarizeTextDetailed(
       })
       .join('\n');
   } else if (format === 'executive') {
+    // Executive format: concise thesis + core findings without duplicating sentences or inflating word count
     const thesis = selectedCompressed[0] || compressSentenceForSynthesis(clean);
-    const findings = selectedCompressed
-      .slice(1)
-      .map((s, i) => `  ${i + 1}. ${s}`)
-      .join('\n');
-    const dataBlock =
-      keyFigures.length > 0
-        ? `\n📊 DATOS Y CIFRAS DETECTADAS:\n  • ${keyFigures.join(' · ')}`
-        : '';
-    const conclusion =
-      selectedCompressed.length > 1
-        ? selectedCompressed[selectedCompressed.length - 1]
-        : thesis;
+    const otherPoints = selectedCompressed.slice(1);
 
-    output = [
-      `📌 TESIS / IDEA CENTRAL:\n  ${thesis}`,
-      findings ? `\n🎯 PUNTOS CLAVE DEL DOCUMENTO:\n${findings}` : '',
-      dataBlock,
-      `\n💡 CONCLUSIÓN SINTETIZADA:\n  ${conclusion}`,
-      topKeywords.length ? `\n🏷️ CONCEPTOS CLAVE: ${topKeywords.slice(0, 6).join(' · ')}` : ''
-    ]
-      .filter(Boolean)
-      .join('\n');
+    const parts: string[] = [`📌 TESIS: ${thesis}`];
+    if (otherPoints.length > 0) {
+      parts.push(`🎯 PUNTOS CLAVE:\n` + otherPoints.map((s, i) => `  ${i + 1}. ${s}`).join('\n'));
+    }
+    if (keyFigures.length > 0) {
+      parts.push(`📊 CIFRAS: ${keyFigures.slice(0, 5).join(' · ')}`);
+    }
+    output = parts.join('\n\n');
+
+    // Strict safety check: if executive formatted output is longer than original text, condense to pure synthesis
+    if (originalWords > 12 && extractWords(output).length >= originalWords) {
+      output = `📌 SÍNTESIS: ${thesis}` + (otherPoints[0] ? `\n• ${otherPoints[0]}` : '');
+    }
   } else if (format === 'studyQuestions') {
     output = selectedCompressed
       .map((s, i) => {
@@ -542,26 +536,27 @@ export function summarizeTextDetailed(
           return `🧵 1/${total} [${hookTitle}]\n${s}`;
         }
         if (i === total - 1 && total > 1) {
-          return `🎯 ${i + 1}/${total} Conclusión:\n${s}${
-            topKeywords.length ? `\n\n#${topKeywords.slice(0, 3).join(' #')}` : ''
-          }`;
+          return `🎯 ${i + 1}/${total} Conclusión:\n${s}`;
         }
         return `🔹 ${i + 1}/${total}\n${s}`;
       })
       .join('\n\n');
   } else if (format === 'actionPlan') {
     output = [
-      `⚡ PLAN DE ACCIÓN Y PUNTOS OPERATIVOS:`,
-      ...selectedCompressed.map((s, i) => `[Paso ${i + 1}] ${s}`),
-      topKeywords.length ? `\nFoco prioritario: ${topKeywords.slice(0, 5).join(', ')}.` : ''
-    ]
-      .filter(Boolean)
-      .join('\n');
+      `⚡ PLAN DE ACCIÓN:`,
+      ...selectedCompressed.map((s, i) => `[Paso ${i + 1}] ${s}`)
+    ].join('\n');
   } else {
     output = selectedCompressed.join(' ').trim();
   }
 
-  const summaryWords = extractWords(output).length;
+  // Final condensation guarantee for all modes
+  let summaryWords = extractWords(output).length;
+  if (originalWords > 15 && summaryWords >= originalWords) {
+    output = selectedCompressed.slice(0, Math.max(1, Math.floor(selectedCompressed.length / 2))).join(' ');
+    summaryWords = extractWords(output).length;
+  }
+
   const savedPercentage =
     originalWords > 0 ? Math.max(0, Math.min(95, Math.round((1 - summaryWords / originalWords) * 100))) : 0;
 
@@ -1297,13 +1292,21 @@ export function analyzeText(text: string): TextAnalysisMetrics {
     }
   });
 
-  const keywords = Object.entries(freq)
+  const filteredFreqEntries = Object.entries(freq).filter(([, count]) => {
+    if (ws.length >= 25 && count < 2) return false;
+    return true;
+  });
+  const finalEntries = filteredFreqEntries.length >= 3 
+    ? filteredFreqEntries 
+    : Object.entries(freq);
+
+  const keywords = finalEntries
     .sort((a, b) => b[1] - a[1])
     .slice(0, 12)
     .map(([word, count]) => ({
       word,
       count,
-      densityPct: ws.length ? ((count / ws.length) * 100).toFixed(1) : '0.0'
+      densityPct: ws.length ? Math.min(100, Math.max(0, (count / ws.length) * 100)).toFixed(1) : '0.0'
     }));
 
   // Bigrams (2-word meaningful expressions)
