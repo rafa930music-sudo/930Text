@@ -46,15 +46,31 @@ export const FontSuite: React.FC<FontSuiteProps> = ({
     const q = searchQuery.toLowerCase().trim();
     return fontStyles.filter(style => {
       const isFav = favoriteFonts.includes(style.id);
-      const matchesCategory =
-        activeCategory === 'todas' ||
-        (activeCategory === 'destacadas' && isFav) ||
-        style.category?.toLowerCase() === activeCategory.toLowerCase();
+      const nameLower = style.name.toLowerCase();
+      const idLower = style.id.toLowerCase();
+      const catLower = (style.category || '').toLowerCase();
+
+      let matchesCategory = false;
+      if (activeCategory === 'todas') {
+        matchesCategory = true;
+      } else if (activeCategory === 'destacadas') {
+        matchesCategory = isFav;
+      } else if (activeCategory === 'redes') {
+        matchesCategory = catLower === 'redes' || nameLower.includes('negrita') || nameLower.includes('versalitas') || nameLower.includes('titular');
+      } else if (activeCategory === 'goticas') {
+        matchesCategory = catLower === 'urbano' || idLower.includes('gothic') || nameLower.includes('gótico') || nameLower.includes('runic') || idLower.includes('doublegothic');
+      } else if (activeCategory === 'cursivas') {
+        matchesCategory = catLower === 'elegantes' || idLower.includes('italic') || idLower.includes('script') || nameLower.includes('cursiva') || nameLower.includes('caligráfica');
+      } else if (activeCategory === 'simbolos') {
+        matchesCategory = catLower === 'decorativas' || idLower.includes('bubble') || idLower.includes('square') || idLower.includes('sparkle') || idLower.includes('mark') || nameLower.includes('burbuja') || nameLower.includes('tachado') || nameLower.includes('vaporwave') || nameLower.includes('espejo') || nameLower.includes('invertido');
+      } else {
+        matchesCategory = catLower === activeCategory.toLowerCase();
+      }
 
       const matchesQuery =
         !q ||
-        style.name.toLowerCase().includes(q) ||
-        style.id.toLowerCase().includes(q);
+        nameLower.includes(q) ||
+        idLower.includes(q);
 
       return matchesCategory && matchesQuery;
     });

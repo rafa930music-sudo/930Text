@@ -134,7 +134,7 @@ import { LimpiadorSuite } from './components/suites/limpiador';
 import { AnalizadorSuite } from './components/suites/analizador';
 import { LaboratorioSuite } from './components/suites/laboratorio';
 import { RimarSuite } from './components/suites/rimar';
-import { OcrSuite } from './components/suites/ocr';
+
 import QRCode from 'qrcode';
 import { generateSocialCardBlob, SocialCardTheme, SocialCardRatio } from './utils/socialCardGenerator';
 
@@ -1351,7 +1351,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    const sectionIds = ['autopilot', 'centro', 'fuente', 'traductor', 'resumidor', 'mejorador', 'limpiador', 'analizador', 'convertidor', 'rimar', 'laboratorio', 'ocr', 'faq'];
+    const sectionIds = ['autopilot', 'centro', 'fuente', 'traductor', 'resumidor', 'mejorador', 'limpiador', 'analizador', 'convertidor', 'rimar', 'laboratorio', 'faq'];
     const io = new IntersectionObserver(
       entries => {
         entries.forEach(entry => {
@@ -1710,14 +1710,7 @@ export default function App() {
         {/* =====================================================================
             SUITE 11 · RECONOCIMIENTO ÓPTICO DE CARACTERES (OCR)
             ===================================================================== */}
-        <OcrSuite
-          copyText={copyText}
-          downloadTxt={downloadTxt}
-          saveToHistory={saveToHistory}
-          sendToTool={sendToTool}
-          addToast={addToast}
-          onRecordRecent={recordRecentTool}
-        />
+
 
         {/* =====================================================================
             VOLUNTARY DONATION SECTION — 100% FREE PLATFORM

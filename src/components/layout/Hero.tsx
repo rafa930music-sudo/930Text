@@ -94,9 +94,10 @@ export const Hero: React.FC<HeroProps> = ({
                     zenText || autoInput || sumInput || impInput || fontInput || '930Text'
                   )
                 }
+                title="Abrir panel de exportación a archivo .txt, PDF o tarjeta social"
                 className="inline-flex items-center justify-center gap-2 h-11 px-4 rounded-2xl font-extrabold text-xs sm:text-sm border border-[var(--line)] bg-[var(--surface)] text-[var(--muted)] hover:text-[var(--text)] hover:border-[var(--gold)] transition whitespace-nowrap"
               >
-                <Download className="w-4 h-4 text-[var(--gold)]" /> Exportar
+                <Download className="w-4 h-4 text-[var(--gold)]" /> Exportar borrador (.txt / PDF)
               </button>
             </div>
           </div>

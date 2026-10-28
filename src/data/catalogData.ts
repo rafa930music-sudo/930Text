@@ -130,23 +130,12 @@ export const TOOL_CATALOG: ToolCatalogItem[] = [
     sample: 'APA 7 · Diff A/B · Emails & WhatsApp',
     search: 'comparar textos diff versiones citas bibliograficas apa mla harvard iso plantillas correos whatsapp',
     icon: Briefcase
-  },
-  {
-    id: 'ocr',
-    index: '11',
-    href: '#ocr',
-    title: 'Escáner OCR & Foto a Texto',
-    subtitle: 'Extrae texto de fotos, cámara móvil, apuntes y capturas con IA',
-    sample: 'Cámara móvil · Apuntes · Libros · Capturas',
-    search: 'ocr escanear fotos camara imagen extraer texto apuntes libros documentos capturas portapapeles',
-    featured: true,
-    icon: Camera
   }
 ];
 
 export const COMMAND_ITEMS = [
   { title: 'Centro de herramientas (11 Suites)', desc: 'Explorar todas las suites de 930Text', target: '#centro', tag: '⌘' },
-  { title: 'Escáner OCR & Foto a Texto', desc: 'Extrae texto de fotos, cámara móvil, apuntes y capturas con IA', target: '#ocr', tag: '📷' },
+
   { title: 'Fuentes Unicode Pro', desc: `${CATALOG.FONT_FAMILIES} estilos + ${CATALOG.FRAMES_LABEL} decorativos para redes y titulares`, target: '#fuente', tag: 'Aa' },
   { title: `Traducir Pro (${CATALOG.LANGUAGES_LABEL})`, desc: 'Todos los idiomas del mundo con pronunciación y descarga bilingüe', target: '#traductor', tag: '文' },
   { title: 'Resumir Pro', desc: '6 formatos: Ejecutivo, Viñetas, Párrafo, Plan, Hilo y Test', target: '#resumidor', tag: '≡' },
