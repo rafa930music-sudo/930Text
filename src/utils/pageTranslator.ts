@@ -14,7 +14,7 @@ export function isPageTranslatorBusy(): boolean {
 }
 
 // Paquetes de ejemplos localizados instantáneos para los idiomas más usados,
-// y traducción automática por IA/GTX para cualquiera de los otros +100 idiomas del mundo.
+// y traducción rápida determinista para cualquiera de los otros +100 idiomas del mundo.
 export interface LocalizedSuiteSamples {
   heroDemo: string;
   fontSample: string;
@@ -57,7 +57,7 @@ export const BASE_SPANISH_SAMPLES: LocalizedSuiteSamples = {
   schemeSample:
     'Subo al escenario con la fuerza del motor\nBuscando una salida dentro de mi corazón\nTransformo cada herida en una nueva canción\nDejando en cada barra todo mi valor',
   autoSample:
-    'La inteligencia artificial generativa y la automatización de flujos de trabajo están transformando la productividad de estudiantes, empresas y creadores digitales en un 42% anual. Sin embargo, el 68% de los equipos pierde más de 4 horas semanales limpiando documentos PDF mal formateados, redactando correos repetitivos y preparando informes ejecutivos.',
+    'La optimización de flujos de trabajo y el formateo digital avanzado están transformando la productividad de estudiantes, empresas y creadores digitales en un 42% anual. Sin embargo, el 68% de los equipos pierde más de 4 horas semanales limpiando documentos PDF mal formateados, redactando correos repetitivos y preparando informes ejecutivos.',
   diffSampleA:
     'Propuesta inicial: El proyecto se entregará en el plazo de 30 días naturales con soporte básico por correo electrónico y una revisión mensual.',
   diffSampleB:
@@ -89,7 +89,7 @@ const INSTANT_LOCALIZED_SAMPLES: Record<string, Partial<LocalizedSuiteSamples>> 
     schemeSample:
       'Walking through the shadows with a burning fire\nRising from the ashes taking everything higher\nBuilding up the vision of a golden empire\nTurning every moment into pure desire',
     autoSample:
-      'Generative artificial intelligence and workflow automation are transforming the productivity of students, businesses, and digital creators by 42% annually. However, 68% of teams lose more than 4 hours every week cleaning poorly formatted PDF documents, writing repetitive emails, and preparing executive reports.',
+      'Digital text optimization and advanced workflows are transforming the productivity of students, businesses, and digital creators by 42% annually. However, 68% of teams lose more than 4 hours every week cleaning poorly formatted PDF documents, writing repetitive emails, and preparing executive reports.',
     diffSampleA:
       'Initial proposal: The project will be delivered within 30 calendar days with basic email support and one monthly review.',
     diffSampleB:
@@ -119,7 +119,7 @@ const INSTANT_LOCALIZED_SAMPLES: Record<string, Partial<LocalizedSuiteSamples>> 
     schemeSample:
       'Je marche dans la nuit guidé par la lumière\nCherchant la vérité au bout de ma prière\nLe rythme de mon cœur résonne dans l’univers\nTransformant chaque pas en un nouveau mystère',
     autoSample:
-      'L’intelligence artificielle générative et l’automatisation transforment la productivité des étudiants, des entreprises et des créateurs numériques de 42 % par an. Cependant, 68 % des équipes perdent plus de 4 heures par semaine à nettoyer des documents PDF mal formatés et à préparer des rapports exécutifs.',
+      'L’optimisation numérique du texte et les flux de travail avancés transforment la productivité des étudiants, des entreprises et des créateurs numériques de 42 % par an. Cependant, 68 % des équipes perdent plus de 4 heures par semaine à nettoyer des documents PDF mal formatés et à préparer des rapports exécutifs.',
     diffSampleA:
       'Proposition initiale : Le projet sera livré dans un délai de 30 jours calendaires avec un support par e-mail de base et une révision mensuelle.',
     diffSampleB:
@@ -149,7 +149,7 @@ const INSTANT_LOCALIZED_SAMPLES: Record<string, Partial<LocalizedSuiteSamples>> 
     schemeSample:
       'Subo no palco com a força da canção\nBuscando uma saída dentro do meu coração\nTransformo cada passo numa nova direção\nDeixando em cada verso toda a minha paixão',
     autoSample:
-      'A inteligência artificial generativa e a automação de fluxos de trabalho estão transformando a produtividade de estudantes, empresas e criadores digitais em 42% ao ano. No entanto, 68% das equipas perdem mais de 4 horas semanais limpando documentos PDF mal formatados e preparando relatórios executivos.',
+      'A otimização de texto e os fluxos de trabalho digitais estão transformando a produtividade de estudantes, empresas e criadores digitais em 42% ao ano. No entanto, 68% das equipas perdem mais de 4 horas semanais limpando documentos PDF mal formatados e preparando relatórios executivos.',
     diffSampleA:
       'Proposta inicial: O projeto será entregue no prazo de 30 dias corridos com suporte básico por e-mail e uma revisão mensal.',
     diffSampleB:

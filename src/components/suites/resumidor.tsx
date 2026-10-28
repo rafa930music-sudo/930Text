@@ -55,7 +55,7 @@ export const ResumidorSuite: React.FC<ResumidorSuiteProps> = ({
   startVoiceDictation,
   dictatingTarget,
   pasteFromClipboard,
-  sampleText = 'La inteligencia artificial generativa y las herramientas lingüísticas de procesamiento local están transformando radicalmente la productividad digital. Al eliminar la dependencia de servidores externos, los usuarios disfrutan de privacidad absoluta, ejecución instantánea sin latencia de red y cero costes recurrentes.',
+  sampleText = 'Las herramientas lingüísticas de procesamiento de texto y maquetación digital están transformando radicalmente la productividad profesional. Al eliminar la dependencia de servidores externos, los usuarios disfrutan de privacidad absoluta, ejecución instantánea sin latencia de red y cero costes recurrentes.',
   openQrTransfer,
   openSocialCardModal,
   speakText,

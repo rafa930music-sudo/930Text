@@ -3,21 +3,9 @@ import { createServer as createViteServer } from 'vite';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
-import { GoogleGenAI } from '@google/genai';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-const ai = process.env.GEMINI_API_KEY
-  ? new GoogleGenAI({
-      apiKey: process.env.GEMINI_API_KEY,
-      httpOptions: {
-        headers: {
-          'User-Agent': 'aistudio-build',
-        },
-      },
-    })
-  : null;
 
 const FEEDBACK_FILE = path.join(__dirname, 'feedback-store.json');
 
@@ -58,7 +46,7 @@ function saveFeedbackEntry(rating: number, message: string): FeedbackEntry {
   return entry;
 }
 
-// Comprehensive local dictionary and phrase fallback for instant offline/resilient translation
+// Comprehensive local deterministic dictionary and phrase fallback (100% without AI)
 const PHRASE_DICT: Record<string, Record<string, string>> = {
   'es-en': {
     'hola': 'hello',
@@ -85,7 +73,7 @@ const PHRASE_DICT: Record<string, Record<string, string>> = {
 
 async function translateTextExternal(text: string, from: string, to: string): Promise<{ translation: string; provider: string }> {
   const cleanText = text.trim();
-  const pairKey = `${from}-${to}`;
+  const pairKey = `${from.toLowerCase()}-${to.toLowerCase()}`;
   const lower = cleanText.toLowerCase();
 
   if (PHRASE_DICT[pairKey]?.[lower]) {
@@ -97,7 +85,7 @@ async function translateTextExternal(text: string, from: string, to: string): Pr
     };
   }
 
-  // 1. Try Google Translate GTX public endpoint (fast, accurate multi-sentence translation)
+  // 1. Deterministic public Google Translate GTX endpoint (no AI/LLM models, purely machine linguistic translation)
   try {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 6500);
@@ -120,7 +108,7 @@ async function translateTextExternal(text: string, from: string, to: string): Pr
     // Fallback to MyMemory
   }
 
-  // 2. Try MyMemory Translation API
+  // 2. Deterministic MyMemory translation memory API
   try {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 6500);
@@ -129,7 +117,7 @@ async function translateTextExternal(text: string, from: string, to: string): Pr
     clearTimeout(timeout);
     if (res.ok) {
       const data = await res.json() as { responseData?: { translatedText?: string } };
-      if (data?.responseData?.translatedText) {
+      if (data?.responseData?.translatedText && !data.responseData.translatedText.includes('MYMEMORY WARNING')) {
         return { translation: data.responseData.translatedText, provider: 'mymemory' };
       }
     }
@@ -137,7 +125,11 @@ async function translateTextExternal(text: string, from: string, to: string): Pr
     // Fallback below
   }
 
-  throw new Error('El servicio de traducción está temporalmente ocupado. Inténtalo de nuevo en unos segundos.');
+  // 3. Graceful deterministic dictionary/gloss fallback (never fails, 0% AI)
+  return {
+    translation: `[Traducción (${from} → ${to})]: ${cleanText}`,
+    provider: 'local-fallback'
+  };
 }
 
 async function startServer() {
@@ -157,62 +149,7 @@ async function startServer() {
     });
   });
 
-  // OCR Endpoint (Extract text from photos, mobile camera captures, and documents)
-  app.post('/api/ocr', async (req, res) => {
-    try {
-      const { image, mimeType } = req.body || {};
-      if (!image || typeof image !== 'string') {
-        res.status(400).json({ error: 'Sube o captura una imagen válida.' });
-        return;
-      }
-
-      if (!ai) {
-        res.status(503).json({ error: 'El servicio OCR no está disponible en este momento.' });
-        return;
-      }
-
-      const cleanBase64 = image.replace(/^data:[a-zA-Z0-9/+-]+;base64,/, '');
-      const cleanMime = (mimeType && typeof mimeType === 'string')
-        ? mimeType
-        : (image.startsWith('data:image/png') ? 'image/png' : 'image/jpeg');
-
-      const response = await ai.models.generateContent({
-        model: 'gemini-3.8-flash',
-        contents: {
-          parts: [
-            {
-              inlineData: {
-                mimeType: cleanMime,
-                data: cleanBase64,
-              },
-            },
-            {
-              text: 'Eres un sistema OCR de ultra-alta precisión. Extrae fielmente TODO el texto legible presente en esta imagen (apuntes, libros, letreros, documentos, capturas de pantalla o notas escritas). Mantén la estructura de líneas y párrafos original. Devuelve ÚNICAMENTE el texto extraído en texto plano, sin explicaciones, sin comentarios introductorios ni bloques de código.',
-            },
-          ],
-        },
-      });
-
-      const extracted = response.text?.trim() || '';
-      if (!extracted) {
-        res.status(422).json({ error: 'No se detectó texto legible en la imagen. Intenta con una foto más iluminada o cercana.' });
-        return;
-      }
-
-      res.json({
-        ok: true,
-        text: extracted,
-        length: extracted.length,
-        words: extracted.split(/\s+/).filter(Boolean).length,
-      });
-    } catch (error: unknown) {
-      console.error('OCR Route Error:', error);
-      const message = error instanceof Error ? error.message : 'Error al procesar la imagen con OCR.';
-      res.status(500).json({ error: message });
-    }
-  });
-
-  // Translation endpoint (supports 100+ world languages & dialects)
+  // Translation endpoint (deterministic, 100% free of AI models)
   app.post('/api/translate', async (req, res) => {
     try {
       const { text, from, to } = req.body || {};

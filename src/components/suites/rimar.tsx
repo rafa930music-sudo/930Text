@@ -9,7 +9,11 @@ import {
   DICTIONARY_TOTAL_WORDS,
   RhymeLanguageCode
 } from '../../utils/rhymeTools';
-import { generateSongBlueprint, DrumBeatStyle } from '../../utils/enterpriseTools';
+import {
+  generateSongBlueprint,
+  DrumBeatStyle,
+  playSynthesizedDrumStep
+} from '../../utils/enterpriseTools';
 import {
   MULTILINGUAL_RHYME_PACKS
 } from '../../data/languagesData';
@@ -167,6 +171,8 @@ export const RimarSuite: React.FC<RimarSuiteProps> = ({
             osc.start();
             osc.stop(ctx.currentTime + 0.07);
           }
+        } else {
+          playSynthesizedDrumStep(ctx, rhythmMode, step16);
         }
         setCurrentBeat(Math.floor(step16 / 4) % 4 + 1);
         step16 = (step16 + 1) % 16;

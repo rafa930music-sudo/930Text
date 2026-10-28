@@ -37,7 +37,7 @@ export const LaboratorioSuite: React.FC<LaboratorioSuiteProps> = ({
   const [citeAuthorLast, setCiteAuthorLast] = useState('Moreno Román');
   const [citeYear, setCiteYear] = useState('2026');
   const [citeTitle, setCiteTitle] = useState('Manual Avanzado de Procesamiento Local de Texto');
-  const [citeSource, setCiteSource] = useState('Editorial Tech Press / AI Studio');
+  const [citeSource, setCiteSource] = useState('Editorial Prensa Técnica');
   const [citeUrl, setCiteUrl] = useState('https://930text.org/manual-local');
 
   const citationsOutput = useMemo(

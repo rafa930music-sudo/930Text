@@ -6,15 +6,27 @@ import {
   ClipboardPaste,
   Wand2,
   Copy,
-  Download
+  Download,
+  Image as ImageIcon,
+  QrCode,
+  Printer,
+  ArrowRight,
+  Sparkles
 } from 'lucide-react';
 
 export interface ConvertidorSuiteProps {
+  input?: string;
+  onInputChange?: (val: string) => void;
   copyText: (text: string, label?: string) => void;
   downloadTxt: (filename: string, content: string) => void;
   saveToHistory?: (tool: string, input: string, output: string) => void;
   sampleText?: string;
   onRecordRecent?: (toolId: string) => void;
+  openSocialCardModal?: (text: string, author?: string) => void;
+  openQrTransfer?: (title: string, text: string) => void;
+  printFormattedReport?: (title: string, text: string, subtitle?: string) => void;
+  sendToTool?: (toolId: string, text: string) => void;
+  addToast?: (msg: string, kind?: 'ok' | 'error') => void;
 }
 
 const CONVERT_MODES: Array<[ConvertMode, string]> = [
@@ -42,19 +54,36 @@ const CONVERT_MODES: Array<[ConvertMode, string]> = [
 ];
 
 export const ConvertidorSuite: React.FC<ConvertidorSuiteProps> = ({
+  input: controlledInput,
+  onInputChange,
   copyText,
   downloadTxt,
   saveToHistory,
   sampleText = 'Guía definitiva de productividad, diseño web y marketing digital 2026',
-  onRecordRecent
+  onRecordRecent,
+  openSocialCardModal,
+  openQrTransfer,
+  printFormattedReport,
+  sendToTool,
+  addToast
 }) => {
-  const [convInput, setConvInput] = useState<string>(() => {
+  const [internalInput, setInternalInput] = useState<string>(() => {
     try {
       return localStorage.getItem('tt-draft-conv') || sampleText;
     } catch {
       return sampleText;
     }
   });
+
+  const convInput = controlledInput !== undefined ? controlledInput : internalInput;
+
+  const setConvInput = (val: string) => {
+    if (onInputChange) {
+      onInputChange(val);
+    }
+    setInternalInput(val);
+  };
+
   const [convOutput, setConvOutput] = useState('');
   const [convMode, setConvMode] = useState<ConvertMode>('title');
   const [convStatus, setConvStatus] = useState<{ msg: string; type: '' | 'ok' | 'error' }>({ msg: '', type: '' });
@@ -77,12 +106,14 @@ export const ConvertidorSuite: React.FC<ConvertidorSuiteProps> = ({
     if (customMode) setConvMode(customMode);
     if (!convInput.trim()) {
       setConvStatus({ msg: 'Escribe un texto para convertir.', type: 'error' });
+      if (addToast) addToast('Escribe o pega un texto para convertir', 'error');
       return;
     }
     if (onRecordRecent) onRecordRecent('convertidor');
     const out = convertTextFormat(convInput, activeMode);
     setConvOutput(out);
     setConvStatus({ msg: `Formato aplicado: ${activeMode}.`, type: 'ok' });
+    if (addToast) addToast(`Formato «${activeMode}» aplicado`);
   };
 
   const pasteFromClipboard = async () => {
@@ -91,9 +122,11 @@ export const ConvertidorSuite: React.FC<ConvertidorSuiteProps> = ({
       if (text) {
         setConvInput(text);
         setConvStatus({ msg: 'Texto pegado del portapapeles.', type: 'ok' });
+        if (addToast) addToast('Texto pegado del portapapeles', 'ok');
       }
     } catch {
       setConvStatus({ msg: 'Usa Ctrl+V para pegar manualmente.', type: 'error' });
+      if (addToast) addToast('Usa Ctrl+V para pegar manualmente', 'error');
     }
   };
 
@@ -105,7 +138,7 @@ export const ConvertidorSuite: React.FC<ConvertidorSuiteProps> = ({
           Convertidor de Formatos Pro
         </h2>
         <p className="mt-1.5 sm:mt-2 text-xs sm:text-base text-[var(--muted)] max-w-2xl">
-          18 transformaciones en tiempo real: mayúsculas, título inteligente, `camelCase`, `PascalCase`, `snake_case`, `CONSTANTE_MAYUS`, `url-slug`, quitar tildes, generar `#hashtags`, numerar líneas, checklist `[ ]`, fila CSV, Base64 y URL Encode.
+          21 transformaciones instantáneas: mayúsculas, título inteligente, camelCase, PascalCase, snake_case, CONSTANTE_MAYUS, url-slug, sin tildes, hashtags, numerar líneas, tareas [ ], CSV, Base64, URL Encode y conversión a imagen PNG.
         </p>
 
         <div className="mt-5 sm:mt-6 rounded-[22px] sm:rounded-[28px] studio-console overflow-hidden">
@@ -130,7 +163,14 @@ export const ConvertidorSuite: React.FC<ConvertidorSuiteProps> = ({
             {saveToHistory && (
               <button
                 type="button"
-                onClick={() => saveToHistory('Conversión Pro', convInput, convOutput)}
+                onClick={() => {
+                  if (!convOutput.trim()) {
+                    if (addToast) addToast('Convierte un texto antes de guardar en el historial', 'error');
+                    return;
+                  }
+                  saveToHistory('Conversión Pro', convInput, convOutput);
+                  if (addToast) addToast('Guardado en tu historial local', 'ok');
+                }}
                 className="h-8 px-3 rounded-xl border border-[var(--line)] bg-[var(--surface)] text-xs font-bold hover:border-[var(--brand)] inline-flex items-center justify-center gap-1.5 shrink-0"
               >
                 <Bookmark className="w-3.5 h-3.5" /> Guardar
@@ -155,6 +195,7 @@ export const ConvertidorSuite: React.FC<ConvertidorSuiteProps> = ({
                     onClick={() => {
                       setConvInput(sampleText);
                       setConvOutput(convertTextFormat(sampleText, convMode));
+                      if (addToast) addToast('Texto de ejemplo cargado');
                     }}
                     className="h-7 px-2.5 rounded-lg border border-[var(--line)] bg-[var(--surface2)] text-[11px] font-bold hover:border-[var(--gold)] inline-flex items-center gap-1"
                   >
@@ -175,9 +216,9 @@ export const ConvertidorSuite: React.FC<ConvertidorSuiteProps> = ({
                 <button
                   type="button"
                   onClick={() => handleConvert()}
-                  className="h-10 px-5 rounded-xl text-xs font-extrabold text-white bg-gradient-to-r from-[var(--brand)] to-[var(--brand2)] inline-flex items-center justify-center whitespace-nowrap shrink-0"
+                  className="h-10 px-5 rounded-xl text-xs font-extrabold text-white bg-gradient-to-r from-[var(--brand)] to-[var(--brand2)] inline-flex items-center justify-center whitespace-nowrap shrink-0 shadow-md active:scale-95 transition"
                 >
-                  Convertir ahora
+                  <Sparkles className="w-3.5 h-3.5 mr-1.5" /> Convertir ahora
                 </button>
                 <button
                   type="button"
@@ -185,6 +226,7 @@ export const ConvertidorSuite: React.FC<ConvertidorSuiteProps> = ({
                     setConvInput('');
                     setConvOutput('');
                     setConvStatus({ msg: '', type: '' });
+                    if (addToast) addToast('Lienzo limpiado');
                   }}
                   className="h-10 px-4 rounded-xl border border-[var(--line)] bg-[var(--surface2)] text-xs font-bold inline-flex items-center justify-center whitespace-nowrap shrink-0"
                 >
@@ -206,30 +248,88 @@ export const ConvertidorSuite: React.FC<ConvertidorSuiteProps> = ({
             <div className="p-4 sm:p-6">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs font-extrabold text-[var(--muted)]">Resultado convertido</span>
-                <span className="text-xs text-[var(--muted)]">Salida</span>
+                <span className="text-xs text-[var(--muted)] tabular-nums">{convOutput.length} caracteres</span>
               </div>
               <textarea
                 value={convOutput}
                 readOnly
                 rows={6}
                 placeholder="El texto convertido aparecerá aquí…"
-                className="w-full p-3.5 sm:p-4 rounded-2xl border border-[var(--line)] bg-[var(--surface2)]/60 text-[var(--text)] resize-y"
+                className="w-full p-3.5 sm:p-4 rounded-2xl border border-[var(--line)] bg-[var(--surface2)]/60 text-[var(--text)] resize-y font-mono text-xs sm:text-sm"
               />
-              <div className="mt-3 flex flex-wrap gap-2">
+
+              {/* Action Buttons Row */}
+              <div className="mt-3 flex flex-wrap items-center gap-2">
                 <button
                   type="button"
-                  onClick={() => copyText(convOutput, 'Resultado copiado')}
+                  onClick={() => copyText(convOutput, 'Resultado copiado al portapapeles')}
                   className="h-10 px-4 rounded-xl border border-[var(--line)] bg-[var(--surface2)] text-xs font-bold hover:border-[var(--brand)] inline-flex items-center justify-center gap-1.5 whitespace-nowrap shrink-0"
                 >
-                  <Copy className="w-3.5 h-3.5 shrink-0" /> Copiar resultado
+                  <Copy className="w-3.5 h-3.5 shrink-0" /> Copiar
                 </button>
+
+                {openSocialCardModal && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (!convOutput.trim()) {
+                        if (addToast) addToast('Convierte un texto primero para crear la imagen', 'error');
+                        return;
+                      }
+                      openSocialCardModal(convOutput, '930Text · Convertidor');
+                    }}
+                    className="h-10 px-3.5 rounded-xl border border-[var(--brand2)]/50 bg-[var(--brand2)]/10 text-[var(--brand2)] text-xs font-bold hover:bg-[var(--brand2)]/20 inline-flex items-center justify-center gap-1.5 whitespace-nowrap shrink-0"
+                    title="Convertir a tarjeta de imagen PNG HD"
+                  >
+                    <ImageIcon className="w-3.5 h-3.5 shrink-0" /> Crear Imagen (PNG)
+                  </button>
+                )}
+
+                {openQrTransfer && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (!convOutput.trim()) {
+                        if (addToast) addToast('No hay resultado para transferir por QR', 'error');
+                        return;
+                      }
+                      openQrTransfer('Texto Convertido', convOutput);
+                    }}
+                    className="h-10 px-3 rounded-xl border border-[var(--line)] bg-[var(--surface2)] text-xs font-bold text-[var(--text)] hover:border-[var(--brand2)] inline-flex items-center justify-center gap-1.5 whitespace-nowrap shrink-0"
+                    title="Escanear con la cámara del móvil"
+                  >
+                    <QrCode className="w-3.5 h-3.5 shrink-0" /> QR Móvil
+                  </button>
+                )}
+
+                {printFormattedReport && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (!convOutput.trim()) {
+                        if (addToast) addToast('No hay contenido para generar PDF', 'error');
+                        return;
+                      }
+                      printFormattedReport('Texto Convertido', convOutput, `Formato ${convMode}`);
+                    }}
+                    className="h-10 px-3 rounded-xl border border-[var(--line)] bg-[var(--surface2)] text-xs font-bold text-[var(--text)] hover:border-[var(--gold)] inline-flex items-center justify-center gap-1.5 whitespace-nowrap shrink-0"
+                    title="Exportar a documento PDF editorial"
+                  >
+                    <Printer className="w-3.5 h-3.5 shrink-0" /> PDF
+                  </button>
+                )}
+
                 <button
                   type="button"
                   onClick={() => downloadTxt('930text-convertido.txt', convOutput)}
                   className="h-10 px-3.5 rounded-xl border border-[var(--line)] bg-[var(--surface2)] text-xs font-bold hover:border-[var(--brand)] inline-flex items-center justify-center gap-1.5 whitespace-nowrap shrink-0"
                 >
-                  <Download className="w-3.5 h-3.5 shrink-0" /> Descargar TXT
+                  <Download className="w-3.5 h-3.5 shrink-0" /> TXT
                 </button>
+              </div>
+
+              {/* Batch & Cross-suite Row */}
+              <div className="mt-2.5 pt-2.5 border-t border-[var(--line)] flex flex-wrap items-center justify-between gap-2">
                 <button
                   type="button"
                   onClick={() => {
@@ -254,11 +354,32 @@ export const ConvertidorSuite: React.FC<ConvertidorSuiteProps> = ({
                       .map(([m, lbl]) => `=== ${lbl.toUpperCase()} ===\n${convertTextFormat(convInput || '930Text', m)}`)
                       .join('\n\n');
                     downloadTxt('930text-18-formatos.txt', bundle);
+                    if (addToast) addToast('Descargado paquete con los 18 formatos', 'ok');
                   }}
-                  className="h-10 px-3.5 rounded-xl border border-[var(--brand2)]/45 bg-[var(--brand-soft)] text-xs font-extrabold text-[var(--brand2)] hover:brightness-110 inline-flex items-center justify-center gap-1.5 whitespace-nowrap shrink-0"
+                  className="h-9 px-3 rounded-xl border border-[var(--brand2)]/45 bg-[var(--brand-soft)] text-xs font-extrabold text-[var(--brand2)] hover:brightness-110 inline-flex items-center justify-center gap-1.5 whitespace-nowrap shrink-0"
                 >
-                  <Download className="w-3.5 h-3.5 shrink-0" /> Descargar los 18 Formatos
+                  <Download className="w-3.5 h-3.5 shrink-0" /> Descargar los 18 Formatos en 1 Archivo
                 </button>
+
+                {sendToTool && (
+                  <div className="flex items-center gap-1">
+                    <span className="text-[11px] text-[var(--muted)] mr-1">Enviar a:</span>
+                    <button
+                      type="button"
+                      onClick={() => sendToTool('mejorador', convOutput)}
+                      className="px-2 py-1 rounded-lg border border-[var(--line)] bg-[var(--surface)] text-[11px] font-bold hover:border-[var(--brand2)] inline-flex items-center gap-1"
+                    >
+                      Mejorador <ArrowRight className="w-2.5 h-2.5" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => sendToTool('analizador', convOutput)}
+                      className="px-2 py-1 rounded-lg border border-[var(--line)] bg-[var(--surface)] text-[11px] font-bold hover:border-[var(--brand2)] inline-flex items-center gap-1"
+                    >
+                      Analizador <ArrowRight className="w-2.5 h-2.5" />
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </div>

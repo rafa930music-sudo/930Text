@@ -1462,6 +1462,21 @@ export function convertTextFormat(text: string, mode: ConvertMode): string {
     }
     case 'pascal': {
       const words = extractWords(text);
+      return words.map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join('');
+    }
+    case 'snake':
+      return extractWords(text).map(w => w.toLowerCase()).join('_');
+    case 'screamingSnake':
+      return extractWords(text).map(w => w.toUpperCase()).join('_');
+    case 'kebab':
+    case 'slug':
+      return extractWords(text).map(w => w.toLowerCase()).join('-');
+    case 'noAccents':
+      return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    case 'numbered':
+      return text.split('\n').map((l, i) => `${i + 1}. ${l}`).join('\n');
+    case 'pascal': {
+      const words = extractWords(text);
       return words
         .map(w => {
           const clean = w.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();

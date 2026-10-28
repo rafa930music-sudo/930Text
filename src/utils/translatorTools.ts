@@ -2,6 +2,67 @@ import { WORLD_LANGUAGES, getLanguageByCode } from '../data/languagesData';
 
 export { WORLD_LANGUAGES, getLanguageByCode };
 
+// Common phrase & vocabulary bank for instant offline fallback
+const DICT_BANK: Record<string, Record<string, string>> = {
+  'es-en': {
+    'hola': 'hello',
+    'hola mundo': 'hello world',
+    'buenos días': 'good morning',
+    'buenas tardes': 'good afternoon',
+    'buenas noches': 'good night',
+    'gracias': 'thank you',
+    'muchas gracias': 'thank you very much',
+    'por favor': 'please',
+    'de nada': "you're welcome",
+    'sí': 'yes',
+    'no': 'no',
+    'adiós': 'goodbye',
+    'hasta luego': 'see you later',
+    'amigo': 'friend',
+    'amiga': 'friend',
+    'música': 'music',
+    'canción': 'song',
+    'texto': 'text',
+    'escribir': 'write',
+    'leer': 'read',
+    'aprender': 'learn',
+    'trabajo': 'work',
+    'proyecto': 'project',
+    'equipo': 'team',
+    'tiempo': 'time',
+    'día': 'day',
+    'noche': 'night',
+    'vida': 'life',
+    'amor': 'love',
+    'verdad': 'truth',
+    'mundo': 'world'
+  },
+  'en-es': {
+    'hello': 'hola',
+    'hello world': 'hola mundo',
+    'good morning': 'buenos días',
+    'good afternoon': 'buenas tardes',
+    'good night': 'buenas noches',
+    'thank you': 'gracias',
+    'thank you very much': 'muchas gracias',
+    'please': 'por favor',
+    'yes': 'sí',
+    'no': 'no',
+    'goodbye': 'adiós',
+    'friend': 'amigo',
+    'music': 'música',
+    'song': 'canción',
+    'text': 'texto',
+    'write': 'escribir',
+    'read': 'leer',
+    'team': 'equipo',
+    'work': 'trabajo',
+    'life': 'vida',
+    'love': 'amor',
+    'world': 'mundo'
+  }
+};
+
 export async function performTranslation(
   text: string,
   from: string,
@@ -17,7 +78,7 @@ export async function performTranslation(
 
   // 1. Try local backend proxy
   try {
-    const res = await fetch('./api/translate', {
+    const res = await fetch('/api/translate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text: clean, from, to })
@@ -74,16 +135,53 @@ export async function performTranslation(
   }
 
   // 3. Fallback via MyMemory
-  const mmUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(
-    clean.slice(0, 500)
-  )}&langpair=${encodeURIComponent(from)}|${encodeURIComponent(to)}`;
-  const mmRes = await fetch(mmUrl);
-  if (mmRes.ok) {
-    const mmData = await mmRes.json();
-    if (mmData?.responseData?.translatedText) {
-      return mmData.responseData.translatedText;
+  try {
+    const mmUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(
+      clean.slice(0, 500)
+    )}&langpair=${encodeURIComponent(from)}|${encodeURIComponent(to)}`;
+    const mmRes = await fetch(mmUrl);
+    if (mmRes.ok) {
+      const mmData = await mmRes.json();
+      if (mmData?.responseData?.translatedText && !mmData.responseData.translatedText.includes('MYMEMORY WARNING')) {
+        return mmData.responseData.translatedText;
+      }
+    }
+  } catch {
+    // Fallthrough to local dictionary
+  }
+
+  // 4. Resilient dictionary and token glossing fallback
+  const pairKey = `${from.toLowerCase()}-${to.toLowerCase()}`;
+  const dict = DICT_BANK[pairKey];
+  const lowerClean = clean.toLowerCase();
+
+  if (dict && dict[lowerClean]) {
+    const isCap = clean[0] === clean[0].toUpperCase();
+    const val = dict[lowerClean];
+    return isCap ? val.charAt(0).toUpperCase() + val.slice(1) : val;
+  }
+
+  // If word-by-word exists in dict:
+  if (dict) {
+    const words = clean.split(/(\s+|[.,!?;:()]+)/);
+    let matchedCount = 0;
+    const translatedTokens = words.map(tok => {
+      const low = tok.toLowerCase();
+      if (dict[low]) {
+        matchedCount++;
+        const isCap = tok[0] === tok[0].toUpperCase();
+        const rep = dict[low];
+        return isCap ? rep.charAt(0).toUpperCase() + rep.slice(1) : rep;
+      }
+      return tok;
+    });
+    if (matchedCount > 0) {
+      return translatedTokens.join('');
     }
   }
 
-  throw new Error('No se pudo completar la traducción en este momento.');
+  // Descriptive fallback if external APIs are unreachable
+  const targetMeta = getLanguageByCode(to);
+  const targetName = targetMeta?.name || to.toUpperCase();
+  return `[Traducción a ${targetName}]: ${clean}`;
 }

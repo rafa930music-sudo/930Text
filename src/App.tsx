@@ -897,10 +897,7 @@ export default function App() {
       return 'Transforma tus textos, títulos y perfiles profesionales ✨';
     }
   });
-  const [fontCategory, setFontCategory] = useState<'todas' | 'redes' | 'elegantes' | 'urbano' | 'decorativas'>('todas');
   const [activeFrameId, setActiveFrameId] = useState<string>('none');
-  const [copiedFontId, setCopiedFontId] = useState<string | null>(null);
-  const [fontSearch, setFontSearch] = useState('');
   const [favoriteFonts, setFavoriteFonts] = useState<string[]>(() => {
     try {
       return JSON.parse(
@@ -928,20 +925,6 @@ export default function App() {
       return next;
     });
   };
-
-  const displayedFonts = useMemo(() => {
-    const q = fontSearch.toLowerCase().trim();
-    const filtered = FONT_STYLES.filter(f => {
-      const matchCat = fontCategory === 'todas' || f.category === fontCategory;
-      const matchQ = !q || f.name.toLowerCase().includes(q) || f.category.toLowerCase().includes(q);
-      return matchCat && matchQ;
-    });
-    return [...filtered].sort((a, b) => {
-      const aFav = favoriteFonts.includes(a.id) ? 1 : 0;
-      const bFav = favoriteFonts.includes(b.id) ? 1 : 0;
-      return bFav - aFav;
-    });
-  }, [fontCategory, favoriteFonts, fontSearch]);
 
 
 
@@ -972,6 +955,28 @@ export default function App() {
   };
 
 
+
+  // ---------------------------------------------------------------------------
+  // 2. TRADUCTOR MULTILINGÜE STATE
+  // ---------------------------------------------------------------------------
+  const [transInput, setTransInput] = useState<string>(() => {
+    try {
+      return localStorage.getItem('tt-draft-trans') || 'Hola equipo, aquí adjunto el borrador del informe estratégico para su revisión antes de la reunión de mañana.';
+    } catch {
+      return 'Hola equipo, aquí adjunto el borrador del informe estratégico para su revisión antes de la reunión de mañana.';
+    }
+  });
+
+  // ---------------------------------------------------------------------------
+  // 3. RESUMIDOR PRO STATE
+  // ---------------------------------------------------------------------------
+  const [sumInput, setSumInput] = useState<string>(() => {
+    try {
+      return localStorage.getItem('tt-draft-sum') || 'Las herramientas lingüísticas de procesamiento de texto y maquetación digital están transformando radicalmente la productividad profesional. Al eliminar la dependencia de servidores externos, los usuarios disfrutan de privacidad absoluta, ejecución instantánea sin latencia de red y cero costes recurrentes.';
+    } catch {
+      return 'Las herramientas lingüísticas de procesamiento de texto y maquetación digital están transformando radicalmente la productividad profesional. Al eliminar la dependencia de servidores externos, los usuarios disfrutan de privacidad absoluta, ejecución instantánea sin latencia de red y cero costes recurrentes.';
+    }
+  });
 
   // ---------------------------------------------------------------------------
   // 4. MEJORADOR PRO STATE (REACTIVE + ORTHOGRAPHIC & STYLE ENGINE)
@@ -1049,19 +1054,31 @@ export default function App() {
     [anInput, serpCustomTitle, serpCustomDesc, serpDomain]
   );
 
+  // ---------------------------------------------------------------------------
+  // 7. CONVERTIDOR PRO STATE
+  // ---------------------------------------------------------------------------
+  const [convInput, setConvInput] = useState<string>(() => {
+    try {
+      return localStorage.getItem('tt-draft-conv') || 'Guía definitiva de productividad, diseño web y marketing digital 2026';
+    } catch {
+      return 'Guía definitiva de productividad, diseño web y marketing digital 2026';
+    }
+  });
+
   // Auto-save active drafts so the customer never loses work on refresh
   useEffect(() => {
     try {
       localStorage.setItem('tt-draft-font', fontInput);
+      localStorage.setItem('tt-draft-trans', transInput);
+      localStorage.setItem('tt-draft-sum', sumInput);
       localStorage.setItem('tt-draft-imp', impInput);
       localStorage.setItem('tt-draft-clean', cleanInput);
       localStorage.setItem('tt-draft-an', anInput);
+      localStorage.setItem('tt-draft-conv', convInput);
     } catch {
       // ignore storage quota
     }
-  }, [fontInput, impInput, cleanInput, anInput]);
-
-
+  }, [fontInput, transInput, sumInput, impInput, cleanInput, anInput, convInput]);
 
   useEffect(() => {
     const loadFromHash = () => {
@@ -1069,9 +1086,12 @@ export default function App() {
       if (!decoded) return;
       const { tool, text } = decoded;
       if (tool === 'fuente') setFontInput(text);
+      else if (tool === 'traductor') setTransInput(text);
+      else if (tool === 'resumidor') setSumInput(text);
       else if (tool === 'mejorador') setImpInput(text);
       else if (tool === 'limpiador') setCleanInput(text);
       else if (tool === 'analizador') setAnInput(text);
+      else if (tool === 'convertidor') setConvInput(text);
       else if (tool === 'autopilot') setAutoInput(text);
 
       setTimeout(() => {
@@ -1089,16 +1109,13 @@ export default function App() {
   // 9. AUTOPILOT 1-CLICK PIPELINE & ENTERPRISE LAB STATE (SUITES 09 & 10)
   // ---------------------------------------------------------------------------
   const [autoInput, setAutoInput] = useState<string>(
-    'Ayer abi en la tarde yo fui al supermercao porq abia ke comprar barias kosas que me faltavan en la kasa. Ademas, la inteligencia artificial generativa y la automatizacion de flujos de trabajo estan transformando la productividad de estudiantes, empresas y creadores digitales en un 42% anual. Sin embargo, el 68% de los equipos pierde mas de 4 horas semanales limpiando documentos PDF mal formateados, redactando correos repetitivos y preparando informes ejecutivos.'
+    'Ayer abi en la tarde yo fui al supermercao porq abia ke comprar barias kosas que me faltavan en la kasa. Ademas, la optimizacion de flujos de trabajo y el formateo digital avanzado estan transformando la productividad de estudiantes, empresas y creadores digitales en un 42% anual. Sin embargo, el 68% de los equipos pierde mas de 4 horas semanales limpiando documentos PDF mal formateados, redactando correos repetitivos y preparando informes ejecutivos.'
   );
-
 
   // Song Blueprint Generator State inside Rimar Studio
   const [songStyle, setSongStyle] = useState<'urbano' | 'pop' | 'balada' | 'epico'>('urbano');
 
-  // ---------------------------------------------------------------------------
-  // 11. ESCÁNER OCR & FOTO A TEXTO (IA VISUAL Y CÁMARA MÓVIL)
-  // ---------------------------------------------------------------------------
+  // Online / Offline Connectivity Detection
   // Online / Offline Connectivity Detection
   const [isOnline, setIsOnline] = useState<boolean>(() => (typeof navigator !== 'undefined' ? navigator.onLine : true));
   useEffect(() => {
@@ -1215,9 +1232,12 @@ export default function App() {
     }
     recordRecentTool(targetId);
     if (targetId === 'fuente') setFontInput(textToPass.slice(0, 500));
+    else if (targetId === 'traductor') setTransInput(textToPass.slice(0, 5000));
+    else if (targetId === 'resumidor') setSumInput(textToPass.slice(0, 20000));
     else if (targetId === 'mejorador') setImpInput(textToPass.slice(0, 8000));
     else if (targetId === 'limpiador') setCleanInput(textToPass.slice(0, 15000));
     else if (targetId === 'analizador') setAnInput(textToPass.slice(0, 20000));
+    else if (targetId === 'convertidor') setConvInput(textToPass.slice(0, 10000));
     else if (targetId === 'autopilot') setAutoInput(textToPass.slice(0, 15000));
     else {
       navigator.clipboard?.writeText(textToPass);
@@ -1584,7 +1604,7 @@ export default function App() {
         <FontSuite 
           input={fontInput}
           onInputChange={setFontInput}
-          fontStyles={displayedFonts}
+          fontStyles={FONT_STYLES}
           activeFrame={activeFrame}
           onFrameChange={setActiveFrameId}
           onCopy={copyText}
@@ -1595,6 +1615,8 @@ export default function App() {
           copyText={copyText}
         />
         <TranslatorSuite
+          input={transInput}
+          onInputChange={setTransInput}
           copyText={copyText}
           downloadTxt={downloadTxt}
           saveToHistory={saveToHistory}
@@ -1608,6 +1630,8 @@ export default function App() {
         />
 
         <ResumidorSuite
+          input={sumInput}
+          onInputChange={setSumInput}
           copyText={copyText}
           downloadTxt={downloadTxt}
           printFormattedReport={printFormattedReport}
@@ -1663,14 +1687,20 @@ export default function App() {
           sampleText={localizedSamples.anSample}
         />
 
-        {/* 7. CONVERTIDOR PRO WORKSPACE */}
         {/* 7. CONVERTIDOR PRO WORKSPACE (EXTRACTED SUITE) */}
         <ConvertidorSuite
+          input={convInput}
+          onInputChange={setConvInput}
           copyText={copyText}
           downloadTxt={downloadTxt}
           saveToHistory={saveToHistory}
           sampleText={localizedSamples.convSample}
           onRecordRecent={recordRecentTool}
+          openSocialCardModal={openSocialCardModal}
+          openQrTransfer={openQrTransfer}
+          printFormattedReport={printFormattedReport}
+          sendToTool={sendToTool}
+          addToast={addToast}
         />
 
         {/* 8. RIMAR · MÚSICA ESTUDIO PRO WORKSPACE (EXTRACTED SUITE) */}

@@ -22,7 +22,7 @@ export interface AutopilotSuiteProps {
   sampleText?: string;
 }
 
-const DEFAULT_SAMPLE = 'Ayer abi en la tarde yo fui al supermercao porq abia ke comprar barias kosas que me faltavan en la kasa. Ademas, la inteligencia artificial generativa y la automatizacion de flujos de trabajo estan transformando la productividad de estudiantes, empresas y creadores digitales en un 42% anual. Sin embargo, el 68% de los equipos pierde mas de 4 horas semanales limpiando documentos PDF mal formateados, redactando correos repetitivos y preparando informes ejecutivos.';
+const DEFAULT_SAMPLE = 'Ayer abi en la tarde yo fui al supermercao porq abia ke comprar barias kosas que me faltavan en la kasa. Ademas, la optimizacion de flujos de trabajo y el formateo digital avanzado estan transformando la productividad de estudiantes, empresas y creadores digitales en un 42% anual. Sin embargo, el 68% de los equipos pierde mas de 4 horas semanales limpiando documentos PDF mal formateados, redactando correos repetitivos y preparando informes ejecutivos.';
 
 export const AutopilotSuite: React.FC<AutopilotSuiteProps> = ({
   input,

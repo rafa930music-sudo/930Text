@@ -65,10 +65,10 @@ export const SUITE_PRESETS: Record<string, SuitePreset[]> = {
   // SUITE 03: RESUMIDOR INTELIGENTE
   resumidor: [
     {
-      id: 'paper-ia',
-      label: 'Artículo sobre IA & Trabajo',
-      badge: 'Científico',
-      text: 'La inteligencia artificial generativa ha experimentado un crecimiento exponencial en el último bienio, revolucionando sectores clave desde el desarrollo de software hasta la redacción editorial y la traducción jurídica. Los estudios más recientes demuestran que los profesionales que incorporan herramientas automatizadas aumentan su productividad entre un 35% y un 55%, reduciendo el tiempo dedicado a tareas repetitivas de formateo y corrección. No obstante, los expertos coinciden en que la supervisión humana sigue siendo fundamental para garantizar el tono, la precisión ética y la adecuación contextual en documentos críticos.'
+      id: 'paper-editorial',
+      label: 'Ensayo de Productividad & Redacción',
+      badge: 'Editorial',
+      text: 'El dominio de la redacción técnica y la estructuración del lenguaje escrito constituyen pilares esenciales en la comunicación contemporánea, permitiendo transmitir ideas complejas con claridad y rigor conceptual. Los estudios demuestran que los profesionales que aplican métodos sistemáticos de edición aumentan la retención de sus lectores entre un 35% y un 55%, reduciendo ambigüedades en informes, manuales y publicaciones académicas. Una arquitectura textual coherente, combinada con una rigurosa corrección de estilo, asegura que cada párrafo aporte valor informativo directo.'
     },
     {
       id: 'reunion-acta',

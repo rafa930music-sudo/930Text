@@ -13,7 +13,8 @@ import {
   Trash2,
   Bookmark,
   Share2,
-  QrCode
+  QrCode,
+  Image as ImageIcon
 } from 'lucide-react';
 import { CATALOG } from '../../config/catalog';
 import { LEGAL_TABS, LEGAL_CONTENT, LegalTabId } from '../../data/legalData';
@@ -702,6 +703,161 @@ export const ModalsContainer: React.FC<ModalsContainerProps> = ({
             >
               Copiar Texto del QR
             </button>
+          </section>
+        </div>
+      )}
+
+      {/* SOCIAL CARD / IMAGE CONVERSION MODAL */}
+      {socialCardModal.isOpen && (
+        <div
+          onClick={() => setSocialCardModal(prev => ({ ...prev, isOpen: false }))}
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm grid place-items-center p-3 sm:p-4"
+        >
+          <section
+            onClick={e => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Convertir texto a imagen"
+            className="w-full max-w-xl max-h-[90dvh] flex flex-col rounded-[24px] studio-console overflow-hidden"
+          >
+            <div className="px-5 py-4 border-b border-[var(--line)] flex items-center justify-between shrink-0">
+              <strong className="font-display text-base font-extrabold flex items-center gap-2 text-[var(--text)]">
+                <ImageIcon className="w-4.5 h-4.5 text-[var(--brand2)]" /> Convertir Texto a Imagen (PNG HD)
+              </strong>
+              <button
+                type="button"
+                onClick={() => setSocialCardModal(prev => ({ ...prev, isOpen: false }))}
+                className="w-8 h-8 rounded-xl grid place-items-center border border-[var(--line)] text-xs font-bold text-[var(--text)] hover:bg-[var(--surface2)]"
+              >
+                ×
+              </button>
+            </div>
+
+            <div className="p-4 sm:p-5 overflow-y-auto space-y-4">
+              {/* Preview image */}
+              <div className="rounded-2xl border border-[var(--line)] bg-[var(--surface2)]/60 p-3 flex flex-col items-center justify-center min-h-[220px]">
+                {socialCardModal.loading ? (
+                  <div className="flex flex-col items-center gap-2 py-10 text-xs font-bold text-[var(--muted)]">
+                    <Sparkles className="w-6 h-6 animate-spin text-[var(--brand2)]" />
+                    Generando lienzo PNG de alta resolución…
+                  </div>
+                ) : socialCardModal.previewUrl ? (
+                  <img
+                    src={socialCardModal.previewUrl}
+                    alt="Tarjeta generada"
+                    className="max-h-64 sm:max-h-72 w-auto rounded-xl shadow-xl border border-[var(--line)] object-contain"
+                  />
+                ) : (
+                  <div className="text-xs text-[var(--danger)] font-bold py-8">
+                    No se pudo renderizar la vista previa de la imagen.
+                  </div>
+                )}
+              </div>
+
+              {/* Aspect Ratio & Theme Selector */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[11px] font-extrabold uppercase tracking-wider text-[var(--muted)] mb-1.5">
+                    Proporción / Formato
+                  </label>
+                  <div className="grid grid-cols-3 gap-1.5">
+                    {(['1:1', '9:16', '16:9'] as SocialCardRatio[]).map(r => (
+                      <button
+                        key={r}
+                        type="button"
+                        onClick={() => setSocialCardModal(prev => ({ ...prev, ratio: r }))}
+                        className={`py-1.5 px-2 rounded-xl text-xs font-extrabold border transition ${
+                          socialCardModal.ratio === r
+                            ? 'border-[var(--brand2)] bg-[var(--brand-soft)] text-[var(--brand2)]'
+                            : 'border-[var(--line)] bg-[var(--surface2)] text-[var(--muted)] hover:text-[var(--text)]'
+                        }`}
+                      >
+                        {r === '1:1' ? 'Cuadrado 1:1' : r === '9:16' ? 'Story 9:16' : 'Banner 16:9'}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-extrabold uppercase tracking-wider text-[var(--muted)] mb-1.5">
+                    Firma / Autor
+                  </label>
+                  <input
+                    type="text"
+                    value={socialCardModal.author}
+                    onChange={e => setSocialCardModal(prev => ({ ...prev, author: e.target.value }))}
+                    maxLength={40}
+                    placeholder="Tu nombre o @usuario"
+                    className="w-full h-9 px-3 rounded-xl border border-[var(--line)] bg-[var(--surface2)] text-xs font-bold text-[var(--text)]"
+                  />
+                </div>
+              </div>
+
+              {/* Theme Selector */}
+              <div>
+                <label className="block text-[11px] font-extrabold uppercase tracking-wider text-[var(--muted)] mb-1.5">
+                  Tema Visual del Fondo
+                </label>
+                <div className="grid grid-cols-2 sm:grid-cols-5 gap-1.5">
+                  {([
+                    ['obsidian', 'Obsidian', 'bg-neutral-900 text-purple-300'],
+                    ['aurora', 'Aurora', 'bg-pink-950 text-pink-300'],
+                    ['midnight', 'Midnight', 'bg-sky-950 text-cyan-300'],
+                    ['gold', 'Gold', 'bg-amber-950 text-amber-300'],
+                    ['minimal', 'Minimal', 'bg-white text-slate-800 border-slate-300']
+                  ] as const).map(([thm, label, colorClass]) => (
+                    <button
+                      key={thm}
+                      type="button"
+                      onClick={() => setSocialCardModal(prev => ({ ...prev, theme: thm as SocialCardTheme }))}
+                      className={`py-1.5 px-2 rounded-xl text-xs font-extrabold border transition flex items-center justify-center gap-1.5 ${colorClass} ${
+                        socialCardModal.theme === thm ? 'ring-2 ring-[var(--brand2)] border-transparent' : 'opacity-85 hover:opacity-100 border-[var(--line)]'
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom Actions */}
+            <div className="px-5 py-3.5 border-t border-[var(--line)] bg-[var(--surface2)]/50 flex flex-wrap items-center justify-between gap-2 shrink-0">
+              <span className="text-[11px] text-[var(--muted)]">
+                {socialCardModal.text.length} caracteres · PNG sin compresión
+              </span>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    copyText(socialCardModal.text, 'Texto copiado');
+                  }}
+                  className="h-9 px-3 rounded-xl border border-[var(--line)] bg-[var(--surface)] text-xs font-bold text-[var(--text)] hover:border-[var(--brand2)] inline-flex items-center gap-1.5"
+                >
+                  <Copy className="w-3.5 h-3.5" /> Copiar texto
+                </button>
+
+                <button
+                  type="button"
+                  disabled={!socialCardModal.previewUrl || socialCardModal.loading}
+                  onClick={() => {
+                    if (!socialCardModal.previewUrl) return;
+                    const a = document.createElement('a');
+                    a.href = socialCardModal.previewUrl;
+                    const slug = socialCardModal.author.toLowerCase().replace(/[^a-z0-9]+/g, '-') || 'tarjeta';
+                    a.download = `930text-${slug}-${socialCardModal.ratio.replace(':', 'x')}.png`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    addToast('¡Tarjeta PNG descargada con éxito!', 'ok');
+                  }}
+                  className="h-9 px-4 rounded-xl bg-gradient-to-r from-[var(--brand)] to-[var(--brand2)] text-white text-xs font-extrabold shadow-md hover:brightness-110 disabled:opacity-50 inline-flex items-center gap-1.5"
+                >
+                  <Download className="w-3.5 h-3.5" /> Descargar PNG HD
+                </button>
+              </div>
+            </div>
           </section>
         </div>
       )}

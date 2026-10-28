@@ -3,7 +3,7 @@ import { summarizeTextDetailed } from '../utils/textTools';
 
 describe('Suite 03 - Resumidor Engine Tests', () => {
   const longSpanishArticle = `
-    La inteligencia artificial generativa y el aprendizaje automático están transformando radicalmente la productividad empresarial moderna en todo el mundo.
+    Las herramientas lingüísticas y el análisis sintáctico computacional están transformando radicalmente la productividad empresarial moderna en todo el mundo.
     Diversas organizaciones globales han implementado herramientas de síntesis documental para agilizar el procesamiento masivo de datos no estructurados.
     Los empleados que utilizan sistemas avanzados de automatización reducen hasta un cuarenta por ciento el tiempo dedicado a redactar informes repetitivos.
     Sin embargo, la supervisión humana sigue siendo un pilar indispensable para garantizar la precisión conceptual, la coherencia ética y el rigor analítico.

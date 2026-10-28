@@ -4,7 +4,7 @@ import { runAutopilotPipeline } from '../utils/enterpriseTools';
 describe('Suite 09 - Autopilot 5-Motor Pipeline Tests', () => {
   const draftText = `
     Ayer abi en la tarde yo fui al supermercao porq abia ke comprar barias kosas que me faltavan en la kasa. 
-    Ademas, la inteligencia artificial generativa y la automatizacion de flujos de trabajo estan transformando 
+    Ademas, la optimizacion de flujos de trabajo y el formateo digital avanzado estan transformando 
     la productividad de estudiantes, empresas y creadores digitales en un 42% anual. 
     Sin embargo, el 68% de los equipos pierde mas de 4 horas semanales limpiando documentos mal formateados.
   `;
