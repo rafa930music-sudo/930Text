@@ -134,7 +134,7 @@ export const TOOL_CATALOG: ToolCatalogItem[] = [
 ];
 
 export const COMMAND_ITEMS = [
-  { title: 'Centro de herramientas (11 Suites)', desc: 'Explorar todas las suites de 930Text', target: '#centro', tag: '⌘' },
+  { title: 'Centro de herramientas (10 Suites)', desc: 'Explorar todas las suites de 930Text', target: '#centro', tag: '⌘' },
 
   { title: 'Fuentes Unicode Pro', desc: `${CATALOG.FONT_FAMILIES} estilos + ${CATALOG.FRAMES_LABEL} decorativos para redes y titulares`, target: '#fuente', tag: 'Aa' },
   { title: `Traducir Pro (${CATALOG.LANGUAGES_LABEL})`, desc: 'Todos los idiomas del mundo con pronunciación y descarga bilingüe', target: '#traductor', tag: '文' },

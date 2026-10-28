@@ -1738,7 +1738,7 @@ export default function App() {
         />
 
         {/* =====================================================================
-            SUITE 11 · RECONOCIMIENTO ÓPTICO DE CARACTERES (OCR)
+            VOLUNTARY DONATION SECTION — 100% FREE PLATFORM
             ===================================================================== */}
 
 
